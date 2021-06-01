@@ -3,7 +3,7 @@ import {
   OnInit,
   AfterViewInit,
   ViewChild,
-  ElementRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { PlanningService } from '../planning.service';
@@ -30,7 +30,7 @@ import { CompileDirectiveMetadata } from '@angular/compiler';
 import { isDifferent } from '@angular/core/src/render3/util';
 import { NotifierService } from 'angular-notifier';
 import { ZoomSlider } from 'src/app/zoomSlider';
-
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-items',
@@ -64,8 +64,11 @@ export class AddItemsComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private appService: ServiceService,
-    notifier: NotifierService
+    notifier: NotifierService,
+    private spinner: NgxSpinnerService,
+    private ref: ChangeDetectorRef
   ) {
+    this.spinner.show();
     this.notifier = notifier;
     this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
       //message contains the data sent from service
@@ -98,7 +101,9 @@ export class AddItemsComponent implements OnInit {
         // console.log(this.pageType, this.elementID);
         this.GetallElementsByID(this.elementID, this.pageType);
       });
+    this.spinner.hide();
   }
+
   pageType;
   elementID;
   pageId;
@@ -216,7 +221,7 @@ export class AddItemsComponent implements OnInit {
     // ]);
   }
 
-  GetallElementsByID(id, type) {
+  async GetallElementsByID(id, type) {
     if (
       type == 'Device' ||
       type == 'Shelf' ||
@@ -226,7 +231,7 @@ export class AddItemsComponent implements OnInit {
     ) {
       console.log('GetallElementsByID id::' + id);
       if (id != 0) {
-        this.planningService
+        await this.planningService
           .getDeviceDataByID(type, id)
           .subscribe((data: any) => {
             console.log('Edit');
@@ -240,6 +245,15 @@ export class AddItemsComponent implements OnInit {
   }
 
   async BindItemsInEdit(dataDtls) {
+    this.spinner.show();
+    console.log('dataDtls -------- ', dataDtls);
+    console.log('myFormGroup - ---- ', this.myFormGroup);
+
+    // this.myFormGroup.patchValue(dataDtls[0]);
+    // this.spinner.hide();
+
+    // await this.sleep(3000);
+
     for (let key in dataDtls[0]) {
       let val = dataDtls[0][key];
       Object.keys(this.myFormGroup.controls).forEach(async (formkey) => {
@@ -284,11 +298,14 @@ export class AddItemsComponent implements OnInit {
                       );
                     });
                   }
+                  // this.ref.detectChanges();
                 });
             }
           });
           await this.sleep(3000);
+
           this.myFormGroup.get(formkey).setValue(val);
+          this.spinner.hide();
         }
       });
     }

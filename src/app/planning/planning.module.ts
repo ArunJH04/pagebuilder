@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServiceService } from '../service.service';
 import { GraphItemsComponent } from './graph-items/graph-items.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 /**
  * Custom angular notifier options
@@ -63,6 +64,7 @@ const customNotifierOptions: NotifierOptions = {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgxSpinnerModule,
     NotifierModule.withConfig(customNotifierOptions),
   ],
   exports: [ListItemsComponent, AddItemsComponent, GraphItemsComponent],

@@ -11,6 +11,7 @@
   },
   "private": true,
   "dependencies": {
+    "7": "0.0.1",
     "@angular/animations": "~7.1.0",
     "@angular/common": "~7.1.0",
     "@angular/compiler": "~7.1.0",
@@ -30,6 +31,7 @@
     "jquery": "^3.5.1",
     "ng2-search-filter": "^0.5.1",
     "ngx-drag-drop": "^1.1.1",
+    "ngx-spinner": "^7.2.0",
     "ngx-text-diff": "^0.5.4",
     "popper.js": "^1.12.9",
     "rxjs": "~6.3.3",

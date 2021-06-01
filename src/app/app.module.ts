@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   RouterModule,
@@ -23,6 +23,7 @@ import { PlanningLayoutComponent } from './layouts/planning-layout/planning-layo
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConfigurationLayoutComponent } from './layouts/configuration-layout/configuration-layout.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 /**
  * Custom angular notifier options
@@ -94,8 +95,10 @@ const customNotifierOptions: NotifierOptions = {
     DndModule,
     HttpClientModule,
     ReactiveFormsModule,
+    NgxSpinnerModule,
     NotifierModule.withConfig(customNotifierOptions),
   ],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [ServiceService],
   bootstrap: [AppComponent],
 })
