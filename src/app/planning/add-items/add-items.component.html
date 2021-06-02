@@ -1,64 +1,57 @@
 <form [formGroup]="myFormGroup">
-  <!-- <div class="col">
+ <!-- <div class="col">
     <h6 class="pt-1 text-muted">New {{this.pageName}}</h6>
   </div> -->
-  <div class="col text-right">
-    <button class="btn btn-light btn-sm mr-3" [routerLink]="discardFunc()">Cancel</button>
-    <button class="btn btn-primary btn-sm mr-2" (click)="onSubmit()" type="submit">Save</button>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div *ngFor="let form_elem of formElements" class="col-sm-6 col-lg-6">
-        <div [ngSwitch]="form_elem.element_type">
-          <!-- element_type: {{form_elem.element_type}} , id: {{form_elem.tab_element_id}} -->
-          <div class="form-group " *ngSwitchCase="'input'">
-            <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
-            <input type="text" class="form-control form-control-sm" formControlName="{{ form_elem.api_param_name }}" />
-          </div>
+ <div class="col text-right">
+  <button class="btn btn-light btn-sm mr-3" [routerLink]="discardFunc()">Cancel</button>
+  <button class="btn btn-primary btn-sm mr-2" (click)="onSubmit()" type="submit">Save</button>
+ </div>
+ <div class="container">
+  <div class="row">
+   <div *ngFor="let form_elem of formElements" class="col-sm-6 col-lg-6">
+    <div [ngSwitch]="form_elem.element_type">
+     <!-- element_type: {{form_elem.element_type}} , id: {{form_elem.tab_element_id}} -->
+     <div class="form-group" *ngSwitchCase="'input'">
+      <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
+      <input type="text" class="form-control form-control-sm" formControlName="{{ form_elem.api_param_name }}" id="{{ form_elem.api_param_name }}" />
+     </div>
 
-          <div class="form-group " *ngSwitchCase="'number'">
-            <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
-            <input type="number" class="form-control form-control-sm"
-              formControlName="{{ form_elem.api_param_name }}" />
-          </div>
+     <div class="form-group" *ngSwitchCase="'number'">
+      <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
+      <input type="number" class="form-control form-control-sm" formControlName="{{ form_elem.api_param_name }}" />
+     </div>
 
-          <div class="form-group " *ngSwitchCase="'select'">
-            <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
-            <select
-              (change)="bindChildDropDownList(form_elem.tab_element_id, form_elem.child_elementid, $event, form_elem.element_action)"
-              class="form-control form-control-sm" formControlName="{{ form_elem.api_param_name }}"
-              id="bind{{ form_elem.tab_element_id }}" attr.data-val="{{ form_elem.obj_name }}0" ngModel required>
-              <option [value]="-1" selected>Please Select</option>
-              <option *ngFor="let opt of form_elem.element_options" value="{{ opt.opt_id }}"
-                attr.data-val="{{ opt.opt_selected_value }}">
-                {{ opt.opt_value }}
-              </option>
-            </select>
-          </div>
+     <div class="form-group" *ngSwitchCase="'select'">
+      <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
+      <select (change)="bindChildDropDownList(form_elem.tab_element_id, form_elem.child_elementid, $event, form_elem.element_action)" class="form-control form-control-sm" formControlName="{{ form_elem.api_param_name }}" id="bind{{ form_elem.tab_element_id }}" attr.data-val="{{ form_elem.obj_name }}0" ngModel required>
+       <option [value]="-1" selected>Please Select</option>
+       <option *ngFor="let opt of form_elem.element_options" value="{{ opt.opt_id }}" attr.data-val="{{ opt.opt_selected_value }}">
+        {{ opt.opt_value }}
+       </option>
+      </select>
+     </div>
 
+     <div class="form-group" *ngSwitchCase="'autocomplete'">
+      <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
 
-          <div class="form-group " *ngSwitchCase="'autocomplete'">
-            <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
+      <ng-select [formControlName]="form_elem.api_param_name">
+       <ng-option *ngFor="let opt of form_elem.element_options" [value]="opt.opt_id">
+        {{ opt.opt_value }}
+       </ng-option>
+      </ng-select>
 
-            <ng-select [formControlName]="form_elem.api_param_name">
-              <ng-option *ngFor="let opt of form_elem.element_options" [value]="opt.opt_id">
-                {{opt.opt_value}}
-              </ng-option>
-            </ng-select>
-
-            <!-- <ng-select [items]="form_elem.element_options" bindLabel="opt_selected_value" bindValue="opt_id"
+      <!-- <ng-select [items]="form_elem.element_options" bindLabel="opt_selected_value" bindValue="opt_id"
               formControlName="{{ form_elem.api_param_name }}">
             </ng-select> -->
 
-
-            <!-- <input list="browsers" class="form-control form-control-sm" name="browser">
+      <!-- <input list="browsers" class="form-control form-control-sm" name="browser">
             <datalist id="browsers">
               <option *ngFor="let opt of [1,2,3,4]" [value]="opt">{{opt}}</option>
               <option *ngFor="let opt of form_elem.element_options" [value]="opt">{{opt}}</option>
             </datalist> -->
-          </div>
-        </div>
-      </div>
+     </div>
     </div>
+   </div>
   </div>
+ </div>
 </form>
