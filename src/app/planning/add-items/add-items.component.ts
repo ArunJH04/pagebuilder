@@ -245,69 +245,65 @@ export class AddItemsComponent implements OnInit {
   }
 
   async BindItemsInEdit(dataDtls) {
-    this.spinner.show();
-    console.log('dataDtls -------- ', dataDtls);
-    console.log('myFormGroup - ---- ', this.myFormGroup);
+    for (const formkey of Object.keys(this.myFormGroup.controls)) {
+      let val = dataDtls[0][formkey];
+      this.myFormGroup.get(formkey).setValue(val);
+      this.spinner.show();
+      for (const input_template of this.formElements) {
+        if (input_template.api_param_name == formkey) {
+          if (
+            input_template.child_elementid != null &&
+            input_template.child_elementid != 0
+          ) {
+            let url =
+              input_template.element_action +
+              '/' +
+              input_template.child_elementid +
+              '/' +
+              val;
+            console.log(url);
+            await this.http
+              .get(url)
+              .pipe(map((res) => JSON.parse(JSON.stringify(res))))
+              .subscribe((data) => {
+                if (data.status == 'success')
+                  this.childOptionsList = data.child_options_list;
+                for (let i = 0; i < this.childOptionsList.length; i++) {
+                  var childObj = this.childOptionsList[i];
+                  var element_id = childObj.tabElementId;
+                  var child_element_options = childObj.tabelement_options;
 
-    // this.myFormGroup.patchValue(dataDtls[0]);
-    // this.spinner.hide();
+                  $('#bind' + element_id.trim())
+                    .find('option')
+                    .remove();
 
-    // await this.sleep(3000);
+                  $('#bind' + element_id).append(
+                    $('<option></option>')
+                      .attr('value', -1)
+                      .attr('selected', 1)
+                      .text('Please Select')
+                  );
 
-    for (let key in dataDtls[0]) {
-      let val = dataDtls[0][key];
-      Object.keys(this.myFormGroup.controls).forEach(async (formkey) => {
-        if (formkey == key) {
-          this.myFormGroup.get(formkey).setValue(val);
-          this.formElements.forEach((input_template) => {
-            if (input_template.api_param_name == key) {
-              this.http
-                .get(
-                  input_template.element_action +
-                    '/' +
-                    input_template.child_elementid +
-                    '/' +
-                    val
-                )
-                .pipe(map((res) => JSON.parse(JSON.stringify(res))))
-                .subscribe((data) => {
-                  if (data.status == 'success')
-                    this.childOptionsList = data.child_options_list;
-                  for (let i = 0; i < this.childOptionsList.length; i++) {
-                    var childObj = this.childOptionsList[i];
-                    var element_id = childObj.tabElementId;
-                    var child_element_options = childObj.tabelement_options;
-
-                    $('#bind' + element_id.trim())
-                      .find('option')
-                      .remove();
-
+                  $.each(child_element_options, function (key, value) {
                     $('#bind' + element_id).append(
                       $('<option></option>')
-                        .attr('value', -1)
-                        .attr('selected', 1)
-                        .text('Please Select')
+                        .attr('value', value.opt_id)
+                        .attr('data-val', value.opt_selected_value)
+                        .text(value.opt_value)
                     );
-
-                    $.each(child_element_options, function (key, value) {
-                      $('#bind' + element_id).append(
-                        $('<option></option>')
-                          .attr('value', value.opt_id)
-                          .attr('data-val', value.opt_selected_value)
-                          .text(value.opt_value)
-                      );
-                    });
-                  }
-                  // this.ref.detectChanges();
-                });
-            }
-          });
-          await this.sleep(3000);
-
-          this.myFormGroup.get(formkey).setValue(val);
-          this.spinner.hide();
+                  });
+                  console.log(element_id + ' dropdown');
+                  //this.myFormGroup.get(formkey).setValue(val);
+                }
+              });
+            await this.sleep(500);
+            this.myFormGroup.get(formkey).setValue(val);
+          }
         }
-      });
+      }
+      //await this.sleep(1000);
+      this.myFormGroup.get(formkey).setValue(val);
+      this.spinner.hide();
     }
   }
 
@@ -319,6 +315,7 @@ export class AddItemsComponent implements OnInit {
     // send message to subscribers via observable subject
     this.appService.sendUpdate(pageDetails);
   }
+
   RefreshData() {
     let elementDetails = {
       pageType: this.pageType,
@@ -333,6 +330,7 @@ export class AddItemsComponent implements OnInit {
     localStorage.setItem('pageID', this.pageId);
     this.Cleardata();
   }
+
   Cleardata() {
     Object.keys(this.myFormGroup.controls).forEach(async (formkey) => {
       this.myFormGroup.get(formkey).setValue('');

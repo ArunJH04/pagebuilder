@@ -24,6 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ConfigurationLayoutComponent } from './layouts/configuration-layout/configuration-layout.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 /**
  * Custom angular notifier options
@@ -96,6 +97,7 @@ const customNotifierOptions: NotifierOptions = {
     HttpClientModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
+    NgSelectModule,
     NotifierModule.withConfig(customNotifierOptions),
   ],
   // schemas: [CUSTOM_ELEMENTS_SCHEMA],

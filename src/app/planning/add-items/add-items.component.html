@@ -35,58 +35,30 @@
               </option>
             </select>
           </div>
+
+
+          <div class="form-group " *ngSwitchCase="'autocomplete'">
+            <label for="{{ form_elem.element_name }}">{{ form_elem.element_name }}</label>
+
+            <ng-select [formControlName]="form_elem.api_param_name">
+              <ng-option *ngFor="let opt of form_elem.element_options" [value]="opt.opt_id">
+                {{opt.opt_value}}
+              </ng-option>
+            </ng-select>
+
+            <!-- <ng-select [items]="form_elem.element_options" bindLabel="opt_selected_value" bindValue="opt_id"
+              formControlName="{{ form_elem.api_param_name }}">
+            </ng-select> -->
+
+
+            <!-- <input list="browsers" class="form-control form-control-sm" name="browser">
+            <datalist id="browsers">
+              <option *ngFor="let opt of [1,2,3,4]" [value]="opt">{{opt}}</option>
+              <option *ngFor="let opt of form_elem.element_options" [value]="opt">{{opt}}</option>
+            </datalist> -->
+          </div>
         </div>
       </div>
     </div>
   </div>
 </form>
-<!-- <form>
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" class="form-control form-control-sm" id="name" placeholder="">
-  </div>
-  <div class="form-group">
-    <label for="typeSelect">Type</label>
-    <select class="form-control form-control-sm" id="typeSelect">
-      <option>- select -</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="noDevice">No Of Devices</label>
-    <input type="text" class="form-control form-control-sm" id="noDevice" placeholder="">
-  </div>
-  <div class="form-group">
-    <label for="vendorSelect">Vendor</label>
-    <select class="form-control form-control-sm" id="vendorSelect">
-      <option>- select -</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="serialNumber">Serial Number</label>
-    <input type="text" class="form-control form-control-sm" id="serialNumber" placeholder="">
-  </div>
-
-  <div class="form-group">
-    <label for="vendorSelect">Status</label>
-    <select class="form-control form-control-sm" id="vendorSelect">
-      <option>- select -</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
-  </div>
-  <div class="form-group">
-    <label for="location">Location</label>
-    <input type="text" class="form-control form-control-sm" id="location" placeholder="">
-  </div>
-
-</form> -->

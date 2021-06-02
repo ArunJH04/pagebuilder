@@ -11,6 +11,7 @@ import { ServiceService } from '../service.service';
 import { GraphItemsComponent } from './graph-items/graph-items.component';
 import { NotifierModule, NotifierOptions } from 'angular-notifier';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 /**
  * Custom angular notifier options
@@ -62,6 +63,7 @@ const customNotifierOptions: NotifierOptions = {
     PlanningRoutingModule,
     Ng2SearchPipeModule,
     FormsModule,
+    NgSelectModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgxSpinnerModule,

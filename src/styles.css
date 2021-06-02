@@ -3,6 +3,7 @@
 
 /* orange theme- main-#ec882a, primary-#ec8e3c, primary-on-hover-#ce6a0c, secondary-#f4ddca  */
 @import '~angular-notifier/styles';
+@import '~@ng-select/ng-select/themes/default.theme.css';
 
 .notifier__notification-message {
   color: #fff !important;

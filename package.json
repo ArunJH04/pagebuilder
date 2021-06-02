@@ -22,6 +22,7 @@
     "@angular/router": "~7.1.0",
     "@fortawesome/angular-fontawesome": "^0.6.1",
     "@fortawesome/fontawesome-free": "^5.15.1",
+    "@ng-select/ng-select": "^2.20.5",
     "@toverux/ngx-sweetalert2": "3.3.1",
     "angular-notifier": "^9.0.1",
     "bootstrap": "^4.5.3",
