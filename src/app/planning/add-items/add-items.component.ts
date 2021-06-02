@@ -234,7 +234,7 @@ export class AddItemsComponent implements OnInit {
      }
     }
    }
-   //await this.sleep(1000);
+   await this.sleep(500);
    this.myFormGroup.get(formkey).setValue(val);
    this.spinner.hide();
   }
