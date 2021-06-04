@@ -203,8 +203,9 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
     // define a simple Node template
     this.myDiagram.nodeTemplate = $(
       go.Node,
-      'Vertical',
+      'Auto',
       { avoidable: false },
+      { deletable: false },
       $(
         go.Panel,
         'Auto',
@@ -217,15 +218,20 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
         {
           fromLinkable: true,
           toLinkable: true,
-          fromSpot: go.Spot.TopBottomSides,
-          toSpot: go.Spot.TopBottomSides,
+          // fromSpot: go.Spot.TopBottomSides,
+          // toSpot: go.Spot.TopBottomSides,
+           fromSpot: go.Spot.RightSide,  // coming out from right side
+            toSpot: go.Spot.LeftSide 
         },
         $(
           go.TextBlock,
           {
+            //width:50,
             alignment: go.Spot.Right,
             margin: 1,
+            //wrap:go.TextBlock.WrapFit
           },
+          
           //font: "Bold 18pt Sans-Serif",
           new go.Binding('font', 'font'),
           new go.Binding('width', 'width'),
@@ -264,7 +270,7 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
 
       { movable: false },
       { avoidable: false },
-
+      { deletable: false },
       new go.Binding('layout', 'lay', function (lay) {
         if (lay.horizontal) {
           return $(go.GridLayout, {
@@ -302,9 +308,12 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
         go.TextBlock,
         { margin: 3 },
         {
+          //width:50,
           alignment: go.Spot.Top,
+          wrap:go.TextBlock.WrapFit
         },
         // font: "Bold 8pt Sans-Serif",
+        new go.Binding('width', 'txtwidth'),
         new go.Binding('font', 'font'),
         new go.Binding('visible', 'showheader', function (showtxt) {
           return showtxt !== 0;
