@@ -16,23 +16,23 @@ export class PlanningService {
  constructor(private http: HttpClient) {}
 
  getDeviceList(pageName): Observable<any> {
-  if (pageName === "Device") {
+  if (pageName == "Device") {
    return this.http.get(environment.baseUrl + environment.apiEndPoint.getAllDevice, { headers: headers });
   }
 
-  if (pageName === "Shelf") {
+  if (pageName == "Shelf") {
    return this.http.get(environment.webApiBaseUrl + environment.apiEndPoint.GetShelf, { headers: headers });
   }
 
-  if (pageName === "Port") {
+  if (pageName == "Port") {
    return this.http.get(environment.webApiBaseUrl + environment.apiEndPoint.GetPorts, { headers: headers });
   }
 
-  if (pageName === "Card") {
+  if (pageName == "Card" || pageName == "ChildCard") {
    return this.http.get(environment.webApiBaseUrl + environment.apiEndPoint.GetCard, { headers: headers });
   }
 
-  if (pageName === "Link") {
+  if (pageName == "Link") {
    return this.http.get(environment.webApiBaseUrl + environment.apiEndPoint.GetLink, { headers: headers });
   }
  }
@@ -54,19 +54,19 @@ export class PlanningService {
    headers: headers,
   };
   let uri;
-  if (pageName === "Device") {
+  if (pageName == "Device") {
    uri = environment.webApiBaseUrl + environment.apiEndPoint.removeNE;
   }
-  if (pageName === "Card") {
+  if (pageName == "Card" || pageName == "ChildCard") {
    uri = environment.webApiBaseUrl + environment.apiEndPoint.removeCard;
   }
-  if (pageName === "Shelf") {
+  if (pageName == "Shelf") {
    uri = environment.webApiBaseUrl + environment.apiEndPoint.removeShelf;
   }
-  if (pageName === "Port") {
+  if (pageName == "Port") {
    uri = environment.webApiBaseUrl + environment.apiEndPoint.removePort;
   }
-  if (pageName === "Link") {
+  if (pageName == "Link") {
    uri = environment.webApiBaseUrl + environment.apiEndPoint.removeLink;
   }
 
@@ -80,23 +80,23 @@ export class PlanningService {
  }
 
  getDeviceDataByID(pageName, id): Observable<any> {
-  if (pageName === "Device") {
+  if (pageName == "Device") {
    return this.http.get(environment.baseUrl + environment.apiEndPoint.getDeviceData + "/" + id, { headers: headers });
   }
 
-  if (pageName === "Shelf") {
+  if (pageName == "Shelf") {
    return this.http.get(environment.baseUrl + environment.apiEndPoint.GetShelfData + "/" + id, { headers: headers });
   }
 
-  if (pageName === "Port") {
+  if (pageName == "Port") {
    return this.http.get(environment.baseUrl + environment.apiEndPoint.GetPortsData + "/" + id, { headers: headers });
   }
 
-  if (pageName === "Card") {
+  if (pageName == "Card" || pageName == "ChildCard") {
    return this.http.get(environment.baseUrl + environment.apiEndPoint.GetCardData + "/" + id, { headers: headers });
   }
 
-  if (pageName === "Link") {
+  if (pageName == "Link") {
    return this.http.get(environment.baseUrl + environment.apiEndPoint.GetLinkData + "/" + id, { headers: headers });
   }
  }
