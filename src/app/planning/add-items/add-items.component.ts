@@ -100,16 +100,21 @@ export class AddItemsComponent implements OnInit {
 
   this.planningService.createPageValues(this.submitAction, this.myFormGroup.value).subscribe((res) => {
    // console.log(res);
-   if (res.status === 200) {
+   if (res.status == 200) {
     this.RefreshData();
     // alert(res.message);
     this.notifier.notify("success", res.message);
     this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
    }
-   if (res.status === 0) {
+   if (res.status == 0) {
     // alert(res.message);
     this.notifier.notify("info", res.message);
     this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
+   }
+   if (res.status == 300) {
+    // alert(res.message);
+    this.notifier.notify("error", res.message);
+    //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
    }
   });
  }
