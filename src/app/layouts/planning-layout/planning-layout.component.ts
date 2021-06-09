@@ -220,7 +220,7 @@ export class PlanningLayoutComponent implements OnInit {
  }
  GetallDataByID(id, type) {
   this.deviceDtls = null;
-  if (type == "Device" || type == "Shelf" || type == "Card" || type == "Link" || type == "Port") {
+  if (type == "Device" || type == "Shelf" || type == "Card" || type == "ChildCard" || type == "Link" || type == "Port") {
    this.planningService.getElementListByID(type, id).subscribe((data: any) => {
     this.deviceDtls = data.Details;
     console.log(this.deviceDtls);

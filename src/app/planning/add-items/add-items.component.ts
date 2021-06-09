@@ -187,7 +187,7 @@ export class AddItemsComponent implements OnInit {
  }
 
  async GetallElementsByID(id, type) {
-  if (type == "Device" || type == "Shelf" || type == "Port" || type == "Card" || type == "Link") {
+  if (type == "Device" || type == "Shelf" || type == "Port" || type == "Card" || type == "ChildCard" || type == "Link") {
    console.log("GetallElementsByID id::" + id);
    if (id != 0) {
     await this.planningService.getDeviceDataByID(type, id).subscribe((data: any) => {
