@@ -318,8 +318,8 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
    $(
     go.Placeholder,
     { padding: 2 },
-
-    new go.Binding("alignment", "align")
+    {alignment:go.Spot.BottomCenter},
+    //new go.Binding("alignment", "go")
    ),
    $(
     go.TextBlock,
@@ -335,7 +335,7 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
     new go.Binding("visible", "showheader", function (showtxt) {
      return showtxt !== 0;
     }),
-    new go.Binding("text", "key")
+    new go.Binding("text", "txt")
    ),
 
    new go.Binding("contextMenu", "clicktype", function (cnt) {
