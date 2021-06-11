@@ -122,7 +122,7 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
   var $ = go.GraphObject.make;
 
   this.myDiagram = $(go.Diagram, "myDiagramDiv", {
-   initialScale: 0.5,
+   initialScale: 0.8,
    initialContentAlignment: go.Spot.TopCenter,
    "undoManager.isEnabled": true,
   });
@@ -252,6 +252,7 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
       //width:50,
       alignment: go.Spot.Right,
       margin: 1,
+      wrap: go.TextBlock.WrapFit,
       //wrap:go.TextBlock.WrapFit
      },
 
@@ -260,6 +261,7 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
      new go.Binding("width", "width"),
      new go.Binding("height", "height"),
      new go.Binding("angle", "angle"),
+     new go.Binding("width", "txtwidth"),
 
      new go.Binding("visible", "showtxt", function (showtxt) {
       return showtxt !== 0;
@@ -318,7 +320,7 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
    $(
     go.Placeholder,
     { padding: 2 },
-    {alignment:go.Spot.BottomCenter},
+    { alignment: go.Spot.BottomCenter }
     //new go.Binding("alignment", "go")
    ),
    $(
