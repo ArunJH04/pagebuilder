@@ -1,23 +1,50 @@
-tbody {
-  display: block;
-  height: 72vh;
-  overflow: auto;
+.tbody {
+ display: block;
+ height: 72vh;
+ overflow: auto;
 }
 thead,
 tbody tr {
-  color: var(--font-color);
-  display: table;
-  width: 100%;
+ color: var(--font-color);
+ display: table;
+ width: 100%;
 }
 
 .pt-25 {
-  padding-top: 0.25rem !important;
+ padding-top: 0.25rem !important;
 }
 .bc-n {
-  background-color: transparent;
-  border: none;
+ background-color: transparent;
+ border: none;
 }
 
 .p-255 {
-  padding: 0.25rem 0.5rem;
+ padding: 0.25rem 0.5rem;
+}
+
+.w5 {
+ width: 5pt;
+}
+.f18 {
+ font-size: 18px;
+}
+.chksize {
+ width: 18px;
+ height: 18px;
+}
+table td,
+th {
+ vertical-align: middle;
+}
+
+.dv90 {
+ width: 90%;
+ float: left;
+ clear: right;
+}
+
+.tblstyle {
+ margin-bottom: 50px;
+ width: 100%;
+ font-size: 16px;
 }

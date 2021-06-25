@@ -1,51 +1,79 @@
 <app-header></app-header>
 <div class="text-center sideMenuBar border-top">
-  <div class="mb-2 pt-3 pb-1 sideMenu" *ngFor="let indItem of menuList" [routerLinkActive]="'is-active'">
-    <a [routerLink]="routeMenu(indItem)" class="text-decoration-none  menu-color">
-      <img [src]="getImageUrl(indItem)" alt="">
-      <p *ngIf="indItem.pageName != 'Circuit' && indItem.pageName != 'Topology'" class="pb-0 ">
-        {{indItem.pageName}}</p>
-    </a>
-  </div>
+ <div class="mb-2 pt-3 pb-1 sideMenu" *ngFor="let indItem of menuList" [routerLinkActive]="'is-active'">
+  <a [routerLink]="routeMenu(indItem)" (click)="setValue(indItem)" class="text-decoration-none menu-color">
+   <img [src]="getImageUrl(indItem)" alt="" />
+   <p *ngIf="indItem.pageName != 'Circuit' && indItem.pageName != 'Topology'" class="pb-0">
+    {{ indItem.pageName }}
+   </p>
+  </a>
+ </div>
 </div>
 <div class="rightContainer border">
-  <div class="row ml-0 mr-0 border-bottom bg-white text-center py-1">
-    <div class="col  align-middle border-right"><img src="../../../assets/enable-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong> {{dashboardCount?.enabledCount}}</strong></span>
-      <p class="m-0">Enabled</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/disable-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.disabledCount}}</strong> </span>
-      <p class="m-0">Disabled</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/passed-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.passedCount}}</strong> </span>
-      <p class="m-0">Passed</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/failed-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.failedCount}}</strong> </span>
-      <p class="m-0">Failed</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/diff-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.configDiffCount}}</strong> </span>
-      <p class="m-0">Config-diff</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/weekly-run-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.weeklyCount}}</strong> </span>
-      <p class="m-0">Weekly Runs</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/daily-run-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.dailyCount}}</strong> </span>
-      <p class="m-0">Daily Runs</p>
-    </div>
-    <div class="col  border-right"><img src="../../../assets/hourly-run-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.hourlyCount}}</strong> </span>
-      <p class="m-0">Hourly Runs</p>
-    </div>
-    <div class="col"><img src="../../../assets/run-once-icon.png" alt="" class="mb-2 mr-2">
-      <span class="h4"> <strong>{{dashboardCount?.runOnceCount}}</strong> </span>
-      <p class="m-0">Run Once</p>
-    </div>
+ <div class="row ml-0 mr-0 border-bottom bg-white text-center py-1">
+  <div class="col align-middle border-right">
+   <img src="../../../assets/enable-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong> {{ dashboardCount?.enabledCount }}</strong></span
+   >
+   <p class="m-0">Enabled</p>
   </div>
-  <router-outlet></router-outlet>
+  <div class="col border-right">
+   <img src="../../../assets/disable-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.disabledCount }}</strong>
+   </span>
+   <p class="m-0">Disabled</p>
+  </div>
+  <div class="col border-right">
+   <img src="../../../assets/passed-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.passedCount }}</strong>
+   </span>
+   <p class="m-0">Passed</p>
+  </div>
+  <div class="col border-right">
+   <img src="../../../assets/failed-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.failedCount }}</strong>
+   </span>
+   <p class="m-0">Failed</p>
+  </div>
+  <div class="col border-right">
+   <img src="../../../assets/diff-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.configDiffCount }}</strong>
+   </span>
+   <p class="m-0">Config-diff</p>
+  </div>
+  <div class="col border-right">
+   <img src="../../../assets/weekly-run-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.weeklyCount }}</strong>
+   </span>
+   <p class="m-0">Weekly Runs</p>
+  </div>
+  <div class="col border-right">
+   <img src="../../../assets/daily-run-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.dailyCount }}</strong>
+   </span>
+   <p class="m-0">Daily Runs</p>
+  </div>
+  <div class="col border-right">
+   <img src="../../../assets/hourly-run-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.hourlyCount }}</strong>
+   </span>
+   <p class="m-0">Hourly Runs</p>
+  </div>
+  <div class="col">
+   <img src="../../../assets/run-once-icon.png" alt="" class="mb-2 mr-2" />
+   <span class="h4">
+    <strong>{{ dashboardCount?.runOnceCount }}</strong>
+   </span>
+   <p class="m-0">Run Once</p>
+  </div>
+ </div>
+ <router-outlet></router-outlet>
 </div>
