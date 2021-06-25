@@ -1,9 +1,24 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from "@angular/core";
+import {
+ Component,
+ OnInit,
+ AfterViewInit,
+ ViewChild,
+ ElementRef,
+} from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { PlanningService } from "../planning.service";
 import { Location } from "@angular/common";
-import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import {
+ FormGroup,
+ FormControl,
+ Validators,
+ FormBuilder,
+} from "@angular/forms";
+import {
+ HttpClient,
+ HttpErrorResponse,
+ HttpHeaders,
+} from "@angular/common/http";
 // import { map } from "rxjs/operators";
 
 import "rxjs/add/operator/map";
@@ -15,6 +30,9 @@ import { Subscription } from "rxjs";
 import * as go from "gojs";
 import * as Jquery from "jquery";
 import { ZoomSlider } from "src/app/zoomSlider";
+import { PlanningLayoutComponent } from "../../layouts/planning-layout/planning-layout.component";
+
+import { AddItemsComponent } from "../../planning/add-items/add-items.component";
 
 declare var $: any;
 @Component({
@@ -44,7 +62,17 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
  listItemMsgReceived: any;
  //end declation for go js codes
 
- constructor(private router: Router, private route: ActivatedRoute, private planningService: PlanningService, private _location: Location, private fb: FormBuilder, private http: HttpClient, private appService: ServiceService) {
+ constructor(
+  private router: Router,
+  private route: ActivatedRoute,
+  private planningService: PlanningService,
+  private _location: Location,
+  private fb: FormBuilder,
+  private http: HttpClient,
+  private appService: ServiceService,
+  private planLayoutCompTs: PlanningLayoutComponent,
+  private addItemsCompTs: AddItemsComponent // private changeDetectorRef: ChangeDetectorRef
+ ) {
   this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
    //message contains the data sent from service
    this.messageReceived = message.text;
@@ -53,38 +81,44 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
 
    //edit item
   });
-  this.EditsubscriptionName = this.appService.getUpdate().subscribe((message) => {
-   //message contains the data sent from service
-   this.listItemMsgReceived = message.text;
-   this.pageType = this.listItemMsgReceived.pageType;
-   this.elementID = this.listItemMsgReceived.elementID;
-   console.log("edit graphitem input:" + this.pageType + "-" + this.elementID);
-   // console.log(this.pageType, this.elementID);
-   // this.GetallElementsByID(this.elementID, this.pageType);
-   let data;
-   let actionLink = "";
+  this.EditsubscriptionName = this.appService
+   .getUpdate()
+   .subscribe((message) => {
+    //message contains the data sent from service
+    this.listItemMsgReceived = message.text;
+    this.pageType = this.listItemMsgReceived.pageType;
+    this.elementID = this.listItemMsgReceived.elementID;
+    console.log("edit graphitem input:" + this.pageType + "-" + this.elementID);
+    // console.log(this.pageType, this.elementID);
+    // this.GetallElementsByID(this.elementID, this.pageType);
+    let data;
+    let actionLink = "";
 
-   if (this.pageType == "Shelf") {
-    data = { ShelfID: this.elementID };
-    actionLink = environment.gojsUrl + "/viewShelf";
-   }
-   if (this.pageType == "Device") {
-    data = { START_NEID: this.elementID };
-    actionLink = environment.gojsUrl + "/GetNEElevationLinkView";
-   }
-   if (this.pageType == "Card") {
-    data = { cardID: this.elementID };
-    actionLink = environment.baseUrl + "/viewCard";
-   }
-   if (this.pageType == "Link") {
-    data = { linkID: this.elementID };
-    actionLink = environment.gojsUrl + "/getLinkView";
-   }
-   if (actionLink == "") this.ngAfterViewResonse("");
-   else {
-    this.onClickSubmit(data, actionLink);
-   }
-  });
+    if (this.pageType == "Shelf") {
+     data = { ShelfID: this.elementID };
+     actionLink = environment.gojsUrl + "/viewShelf";
+    }
+    if (this.pageType == "Device") {
+     // data = { START_NEID: this.elementID };
+     data = {
+      START_NEID: this.elementID,
+      Selected_Context_ID: message.text.selectedContextID,
+     };
+     actionLink = environment.gojsUrl + "/GetNEElevationLinkView";
+    }
+    if (this.pageType == "Card") {
+     data = { cardID: this.elementID };
+     actionLink = environment.baseUrl + "/viewCard";
+    }
+    if (this.pageType == "Link") {
+     data = { linkID: this.elementID };
+     actionLink = environment.gojsUrl + "/getLinkView";
+    }
+    if (actionLink == "") this.ngAfterViewResonse("");
+    else {
+     this.onClickSubmit(data, actionLink);
+    }
+   });
  }
 
  pageType;
@@ -119,6 +153,11 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
 
   this.showDiagram = true;
 
+  var router = this.router;
+  var planCompTS = this.planLayoutCompTs;
+
+  var addCompTS = this.addItemsCompTs;
+
   var $ = go.GraphObject.make;
 
   this.myDiagram = $(go.Diagram, "myDiagramDiv", {
@@ -149,7 +188,27 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
   });
 
   function contextMenuItemClick(ele) {
-   console.log("element data-attribute : " + ele.target.getAttribute("data-CallUrl"));
+   console.log(
+    "element data-attribute : " + ele.target.getAttribute("data-CallUrl")
+   );
+
+   var contextID = ele.target.getAttribute("data-contextID");
+   // var contextValue = ele.target.getAttribute('data-contextValue');
+
+   if (ele.target.getAttribute("id") === "Create Port") {
+    let eleObj = {
+     pageName: "Port",
+     pageId: "3",
+    };
+    router.navigate(["/planning/list-items/Port/3"]);
+
+    planCompTS.setValue(eleObj);
+    planCompTS.fromGraphItemsComponentHideGraphDiv();
+    addCompTS.fromGraphItemsComponentUpdateHTMLComponent(contextID, 3);
+    setTimeout(function () {
+     addCompTS.fromGraphItemsComponentSelectNEtagElement(contextID);
+    }, 1000);
+   }
   }
   contextMenuElement.addEventListener(
    "contextmenu",
@@ -316,7 +375,14 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
     }
    }),
 
-   $(go.Shape, new go.Binding("figure", "fig"), new go.Binding("fill", "fillcolor"), new go.Binding("stroke", "stroke"), new go.Binding("strokeWidth", "strokeWidth"), new go.Binding("desiredSize", "size", go.Size.parse)),
+   $(
+    go.Shape,
+    new go.Binding("figure", "fig"),
+    new go.Binding("fill", "fillcolor"),
+    new go.Binding("stroke", "stroke"),
+    new go.Binding("strokeWidth", "strokeWidth"),
+    new go.Binding("desiredSize", "size", go.Size.parse)
+   ),
    $(
     go.Placeholder,
     { padding: 2 },
@@ -392,14 +458,32 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
      Jquery(".form-control").filter('[data-val="Shelf0"]').empty();
      Jquery(".form-control")
       .filter('[data-val="Shelf0"]')
-      .append('<option value="' + parentObjectID + '">' + parentObjectNamee + "</option>");
-     Jquery(".form-control").filter('[data-val="Shelf0"]').val(parentObjectID).trigger("change");
+      .append(
+       '<option value="' +
+        parentObjectID +
+        '">' +
+        parentObjectNamee +
+        "</option>"
+      );
+     Jquery(".form-control")
+      .filter('[data-val="Shelf0"]')
+      .val(parentObjectID)
+      .trigger("change");
     } else if (index == 1) {
      Jquery(".form-control").filter('[data-val="Shelf1"]').empty();
      Jquery(".form-control")
       .filter('[data-val="Shelf1"]')
-      .append('<option value="' + parentObjectID + '">' + parentObjectNamee + "</option>");
-     Jquery(".form-control").filter('[data-val="Shelf1"]').val(parentObjectID).trigger("change");
+      .append(
+       '<option value="' +
+        parentObjectID +
+        '">' +
+        parentObjectNamee +
+        "</option>"
+      );
+     Jquery(".form-control")
+      .filter('[data-val="Shelf1"]')
+      .val(parentObjectID)
+      .trigger("change");
     }
 
     // Jquery('.form-control')..filter('[data-val="Shelf0"]').change(function(){
@@ -429,7 +513,12 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
    alert("Link Dran from" + fromPort + " to=" + toPort + "direc=" + direction);
 
    this.http
-    .get(environment.apikey + "/getObjectDetaills/" + fromPort.split("port")[1] + "/Port")
+    .get(
+     environment.apikey +
+      "/getObjectDetaills/" +
+      fromPort.split("port")[1] +
+      "/Port"
+    )
     .map((res: Response) => res.json())
     .subscribe((data: any) => {
      if (data.status == "success")
@@ -446,23 +535,39 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
      if (parentShelf != null && fromIndex == 0) {
       Jquery(".form-control")
        .filter('[data-val="Shelf0"]')
-       .append('<option value="' + parentShelf + '">Shelf ' + parentShelf + "</option>");
-      Jquery(".form-control").filter('[data-val="Shelf0"]').val(parentShelf).change();
+       .append(
+        '<option value="' + parentShelf + '">Shelf ' + parentShelf + "</option>"
+       );
+      Jquery(".form-control")
+       .filter('[data-val="Shelf0"]')
+       .val(parentShelf)
+       .change();
 
       Jquery(".form-control")
        .filter('[data-val="Port0"]')
        .append('<option value="' + fromPort + '">' + fromPort + "</option>");
-      Jquery(".form-control").filter('[data-val="Port0"]').val(fromPort).change();
+      Jquery(".form-control")
+       .filter('[data-val="Port0"]')
+       .val(fromPort)
+       .change();
      } else if (parentShelf != null && fromIndex == 1) {
       Jquery(".form-control")
        .filter('[data-val="Shelf1"]')
-       .append('<option value="' + parentShelf + '">Shelf ' + parentShelf + "</option>");
-      Jquery(".form-control").filter('[data-val="Shelf1"]').val(parentShelf).change();
+       .append(
+        '<option value="' + parentShelf + '">Shelf ' + parentShelf + "</option>"
+       );
+      Jquery(".form-control")
+       .filter('[data-val="Shelf1"]')
+       .val(parentShelf)
+       .change();
 
       Jquery(".form-control")
        .filter('[data-val="Port1"]')
        .append('<option value="' + fromPort + '">' + fromPort + "</option>");
-      Jquery(".form-control").filter('[data-val="Port1"]').val(fromPort).change();
+      Jquery(".form-control")
+       .filter('[data-val="Port1"]')
+       .val(fromPort)
+       .change();
      }
 
      //  if(index ==0){
@@ -477,10 +582,16 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
     });
 
    this.http
-    .get(environment.apikey + "/getObjectDetaills/" + toPort.split("port")[1] + "/Port")
+    .get(
+     environment.apikey +
+      "/getObjectDetaills/" +
+      toPort.split("port")[1] +
+      "/Port"
+    )
     .map((res: Response) => res.json())
     .subscribe((data: any) => {
-     if (data.status == "success") console.log("parent json=" + JSON.stringify(data.PARENT_JSON));
+     if (data.status == "success")
+      console.log("parent json=" + JSON.stringify(data.PARENT_JSON));
      console.log("child json=" + JSON.stringify(data.CHILD_JSON));
 
      var parentNE = data.PARENT_JSON.parent_ne;
@@ -490,8 +601,17 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
      if (portParentShelf != null && toIndex == 0) {
       Jquery(".form-control")
        .filter('[data-val="Shelf0"]')
-       .append('<option value="' + portParentShelf + '">Shelf ' + portParentShelf + "</option>");
-      Jquery(".form-control").filter('[data-val="Shelf0"]').val(portParentShelf).change();
+       .append(
+        '<option value="' +
+         portParentShelf +
+         '">Shelf ' +
+         portParentShelf +
+         "</option>"
+       );
+      Jquery(".form-control")
+       .filter('[data-val="Shelf0"]')
+       .val(portParentShelf)
+       .change();
 
       Jquery(".form-control")
        .filter('[data-val="Port0"]')
@@ -500,8 +620,17 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
      } else if (portParentShelf != null && toIndex == 1) {
       Jquery(".form-control")
        .filter('[data-val="Shelf1"]')
-       .append('<option value="' + portParentShelf + '">Shelf ' + portParentShelf + "</option>");
-      Jquery(".form-control").filter('[data-val="Shelf1"]').val(portParentShelf).change();
+       .append(
+        '<option value="' +
+         portParentShelf +
+         '">Shelf ' +
+         portParentShelf +
+         "</option>"
+       );
+      Jquery(".form-control")
+       .filter('[data-val="Shelf1"]')
+       .val(portParentShelf)
+       .change();
 
       Jquery(".form-control")
        .filter('[data-val="Port1"]')
@@ -523,7 +652,14 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
    if (part.data.index == 0) {
     Jquery(".form-control")
      .filter('[data-val="' + part.data.objectname + '0"]')
-     .append('<option value="' + part.data.objectid + '">' + part.data.objectname + part.data.objectid + "</option>");
+     .append(
+      '<option value="' +
+       part.data.objectid +
+       '">' +
+       part.data.objectname +
+       part.data.objectid +
+       "</option>"
+     );
     Jquery(".form-control")
      .filter('[data-val="' + part.data.objectname + '0"]')
      .val(part.data.objectid)
@@ -531,7 +667,14 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
    } else if (part.data.index == 1) {
     Jquery(".form-control")
      .filter('[data-val="' + part.data.objectname + '1"]')
-     .append('<option value="' + part.data.objectid + '">' + part.data.objectname + part.data.objectid + "</option>");
+     .append(
+      '<option value="' +
+       part.data.objectid +
+       '">' +
+       part.data.objectname +
+       part.data.objectid +
+       "</option>"
+     );
     Jquery(".form-control")
      .filter('[data-val="' + part.data.objectname + '1"]')
      .val(part.data.objectid)
@@ -539,10 +682,17 @@ export class GraphItemsComponent implements OnInit, AfterViewInit {
    }
 
    this.http
-    .get(environment.apikey + "/getObjectDetaills/" + part.data.objectid + "/" + part.data.objectname)
+    .get(
+     environment.apikey +
+      "/getObjectDetaills/" +
+      part.data.objectid +
+      "/" +
+      part.data.objectname
+    )
     .map((res: Response) => res.json())
     .subscribe((data: any) => {
-     if (data.status == "success") parseParent(part.data.objectname, data.PARENT_JSON, part.data.index);
+     if (data.status == "success")
+      parseParent(part.data.objectname, data.PARENT_JSON, part.data.index);
      console.log("parent json=" + JSON.stringify(data.PARENT_JSON));
      console.log("child json=" + JSON.stringify(data.CHILD_JSON));
     });

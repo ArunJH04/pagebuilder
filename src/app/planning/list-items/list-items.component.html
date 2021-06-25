@@ -42,9 +42,9 @@
     </tr>
     <tr *ngFor="let indVal of allDevices | filter: searchText">
      <th scope="row"><input type="checkbox" (click)="selectID($event)" id="{{ indVal.id }}" /></th>
-     <td (click)="getRecord(indVal)">{{ indVal.name }}</td>
-     <td (click)="getRecord(indVal)">{{ indVal.serialno }}</td>
-     <td (click)="getRecord(indVal)">
+     <td id="{{ indVal.id }}" (click)="getRecord($event, indVal)">{{ indVal.name }}</td>
+     <td id="{{ indVal.id }}" (click)="getRecord($event, indVal)">{{ indVal.serialno }}</td>
+     <td id="{{ indVal.id }}" (click)="getRecord($event, indVal)">
       <span *ngIf="indVal.status === 1" class="text-success">Active </span>
       <span *ngIf="indVal.status === 0" class="text-danger">Inactive </span>
      </td>

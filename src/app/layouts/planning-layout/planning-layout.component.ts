@@ -239,4 +239,19 @@ export class PlanningLayoutComponent implements OnInit {
   localStorage.setItem("pageType", this.pageType);
   localStorage.setItem("elementID", "0");
  }
+
+ //Anand
+
+ fromGraphItemsComponentHideGraphDiv() {
+  if (this.showDiv1) {
+   this.showDiv1 = false;
+   this.showDiv2 = true;
+   return;
+  }
+  if (this.showDiv2) {
+   this.showDiv2 = false;
+   this.showDiv1 = true;
+   return;
+  }
+ }
 }

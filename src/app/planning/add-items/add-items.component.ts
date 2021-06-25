@@ -1,8 +1,19 @@
-import { Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef } from "@angular/core";
+import {
+ Component,
+ OnInit,
+ AfterViewInit,
+ ViewChild,
+ ChangeDetectorRef,
+} from "@angular/core";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { PlanningService } from "../planning.service";
 import { Location } from "@angular/common";
-import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
+import {
+ FormGroup,
+ FormControl,
+ Validators,
+ FormBuilder,
+} from "@angular/forms";
 import * as $ from "jquery";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 // import { map } from "rxjs/operators";
@@ -20,6 +31,7 @@ import { isDifferent } from "@angular/core/src/render3/util";
 import { NotifierService } from "angular-notifier";
 import { ZoomSlider } from "src/app/zoomSlider";
 import { NgxSpinnerService } from "ngx-spinner";
+import { Optional } from "@angular/core";
 
 @Component({
  selector: "app-add-items",
@@ -45,7 +57,19 @@ export class AddItemsComponent implements OnInit {
  //end declation for go js codes
  private notifier: NotifierService;
 
- constructor(private router: Router, private route: ActivatedRoute, private planningService: PlanningService, private _location: Location, private fb: FormBuilder, private http: HttpClient, private appService: ServiceService, notifier: NotifierService, private spinner: NgxSpinnerService, private ref: ChangeDetectorRef) {
+ constructor(
+  @Optional() private ref: ChangeDetectorRef,
+  private router: Router,
+  private route: ActivatedRoute,
+  private planningService: PlanningService,
+  private _location: Location,
+  private fb: FormBuilder,
+  private http: HttpClient,
+  private appService: ServiceService,
+  notifier: NotifierService,
+  private spinner: NgxSpinnerService
+ ) {
+  this.ref = ref;
   this.spinner.show();
   this.notifier = notifier;
   this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
@@ -58,20 +82,25 @@ export class AddItemsComponent implements OnInit {
     this.formElements = data.tabs_list[0].elements_list;
     // console.log(this.formElements);
     this.formElements.forEach((input_template) => {
-     this.myFormGroup.addControl(input_template.api_param_name, new FormControl(""));
+     this.myFormGroup.addControl(
+      input_template.api_param_name,
+      new FormControl("")
+     );
     });
    });
    //edit item
   });
-  this.EditsubscriptionName = this.appService.getUpdate().subscribe((message) => {
-   //message contains the data sent from service
-   this.listItemMsgReceived = message.text;
-   this.pageType = this.listItemMsgReceived.pageType;
-   this.elementID = this.listItemMsgReceived.elementID;
-   console.log("edit item:" + this.pageType + "-" + this.elementID);
-   // console.log(this.pageType, this.elementID);
-   this.GetallElementsByID(this.elementID, this.pageType);
-  });
+  this.EditsubscriptionName = this.appService
+   .getUpdate()
+   .subscribe((message) => {
+    //message contains the data sent from service
+    this.listItemMsgReceived = message.text;
+    this.pageType = this.listItemMsgReceived.pageType;
+    this.elementID = this.listItemMsgReceived.elementID;
+    console.log("edit item:" + this.pageType + "-" + this.elementID);
+    // console.log(this.pageType, this.elementID);
+    this.GetallElementsByID(this.elementID, this.pageType);
+   });
   this.spinner.hide();
  }
 
@@ -84,6 +113,9 @@ export class AddItemsComponent implements OnInit {
  deviceDtls;
  ngOnInit() {
   this.myFormGroup = new FormGroup({});
+ }
+ ngAfterContentChecked() {
+  this.ref.detectChanges();
  }
 
  onSubmit() {
@@ -98,33 +130,47 @@ export class AddItemsComponent implements OnInit {
 
   console.log("myFormGroup" + JSON.stringify(this.myFormGroup.value));
 
-  this.planningService.createPageValues(this.submitAction, this.myFormGroup.value).subscribe((res) => {
-   // console.log(res);
-   if (res.status == 200) {
-    this.RefreshData();
-    // alert(res.message);
-    this.notifier.notify("success", res.message);
-    this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
-   }
-   if (res.status == 0) {
-    // alert(res.message);
-    this.notifier.notify("info", res.message);
-    this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
-   }
-   if (res.status == 300) {
-    // alert(res.message);
-    this.notifier.notify("error", res.message);
-    //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
-   }
-  });
+  this.planningService
+   .createPageValues(this.submitAction, this.myFormGroup.value)
+   .subscribe((res) => {
+    // console.log(res);
+    if (res.status == 200) {
+     this.RefreshData();
+     // alert(res.message);
+     this.notifier.notify("success", res.message);
+     this.router.navigate([
+      "/planning/list-items",
+      { pageName: this.pageName, pageID: this.pageId },
+     ]);
+    }
+    if (res.status == 0) {
+     // alert(res.message);
+     this.notifier.notify("info", res.message);
+     this.router.navigate([
+      "/planning/list-items",
+      { pageName: this.pageName, pageID: this.pageId },
+     ]);
+    }
+    if (res.status == 300) {
+     // alert(res.message);
+     this.notifier.notify("error", res.message);
+     //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
+    }
+   });
  }
 
- bindChildDropDownList(tab_element_id, child_element_id, event, element_action) {
+ bindChildDropDownList(
+  tab_element_id,
+  child_element_id,
+  event,
+  element_action
+ ) {
   if (element_action != null) {
    var child_element_Value = event.target.value;
    const selectEl = event.target;
 
-   const selectedVal = selectEl.options[selectEl.selectedIndex].getAttribute("data-val");
+   const selectedVal =
+    selectEl.options[selectEl.selectedIndex].getAttribute("data-val");
 
    // console.log('const val=' + selectedVal);
 
@@ -135,7 +181,8 @@ export class AddItemsComponent implements OnInit {
     .get(element_action + "/" + child_element_id + "/" + selectedVal)
     .pipe(map((res) => JSON.parse(JSON.stringify(res))))
     .subscribe((data) => {
-     if (data.status == "success") this.childOptionsList = data.child_options_list;
+     if (data.status == "success")
+      this.childOptionsList = data.child_options_list;
      for (let i = 0; i < this.childOptionsList.length; i++) {
       var childObj = this.childOptionsList[i];
       // console.log('val1=' + childObj.tabElementId);
@@ -162,10 +209,20 @@ export class AddItemsComponent implements OnInit {
         .find("option")
         .remove();
 
-       $("#bind" + element_id).append($("<option></option>").attr("value", -1).attr("selected", 1).text("Please Select"));
+       $("#bind" + element_id).append(
+        $("<option></option>")
+         .attr("value", -1)
+         .attr("selected", 1)
+         .text("Please Select")
+       );
 
        $.each(child_element_options, function (key, value) {
-        $("#bind" + element_id).append($("<option></option>").attr("value", value.opt_id).attr("data-val", value.opt_selected_value).text(value.opt_value));
+        $("#bind" + element_id).append(
+         $("<option></option>")
+          .attr("value", value.opt_id)
+          .attr("data-val", value.opt_selected_value)
+          .text(value.opt_value)
+        );
        });
       }
      }
@@ -187,14 +244,23 @@ export class AddItemsComponent implements OnInit {
  }
 
  async GetallElementsByID(id, type) {
-  if (type == "Device" || type == "Shelf" || type == "Port" || type == "Card" || type == "ChildCard" || type == "Link") {
+  if (
+   type == "Device" ||
+   type == "Shelf" ||
+   type == "Port" ||
+   type == "Card" ||
+   type == "ChildCard" ||
+   type == "Link"
+  ) {
    console.log("GetallElementsByID id::" + id);
    if (id != 0) {
-    await this.planningService.getDeviceDataByID(type, id).subscribe((data: any) => {
-     console.log("Edit");
-     this.deviceDtls = data.Details;
-     this.BindItemsInEdit(this.deviceDtls);
-    });
+    await this.planningService
+     .getDeviceDataByID(type, id)
+     .subscribe((data: any) => {
+      console.log("Edit");
+      this.deviceDtls = data.Details;
+      this.BindItemsInEdit(this.deviceDtls);
+     });
    } else {
     this.Cleardata();
    }
@@ -208,14 +274,23 @@ export class AddItemsComponent implements OnInit {
    this.spinner.show();
    for (const input_template of this.formElements) {
     if (input_template.api_param_name == formkey) {
-     if (input_template.child_elementid != null && input_template.child_elementid != 0) {
-      let url = input_template.element_action + "/" + input_template.child_elementid + "/" + val;
+     if (
+      input_template.child_elementid != null &&
+      input_template.child_elementid != 0
+     ) {
+      let url =
+       input_template.element_action +
+       "/" +
+       input_template.child_elementid +
+       "/" +
+       val;
       console.log(url);
       await this.http
        .get(url)
        .pipe(map((res) => JSON.parse(JSON.stringify(res))))
        .subscribe((data) => {
-        if (data.status == "success") this.childOptionsList = data.child_options_list;
+        if (data.status == "success")
+         this.childOptionsList = data.child_options_list;
         for (let i = 0; i < this.childOptionsList.length; i++) {
          var childObj = this.childOptionsList[i];
          var element_id = childObj.tabElementId;
@@ -225,10 +300,20 @@ export class AddItemsComponent implements OnInit {
           .find("option")
           .remove();
 
-         $("#bind" + element_id).append($("<option></option>").attr("value", -1).attr("selected", 1).text("Please Select"));
+         $("#bind" + element_id).append(
+          $("<option></option>")
+           .attr("value", -1)
+           .attr("selected", 1)
+           .text("Please Select")
+         );
 
          $.each(child_element_options, function (key, value) {
-          $("#bind" + element_id).append($("<option></option>").attr("value", value.opt_id).attr("data-val", value.opt_selected_value).text(value.opt_value));
+          $("#bind" + element_id).append(
+           $("<option></option>")
+            .attr("value", value.opt_id)
+            .attr("data-val", value.opt_selected_value)
+            .text(value.opt_value)
+          );
          });
          console.log(element_id + " dropdown");
          //this.myFormGroup.get(formkey).setValue(val);
@@ -273,5 +358,61 @@ export class AddItemsComponent implements OnInit {
   Object.keys(this.myFormGroup.controls).forEach(async (formkey) => {
    this.myFormGroup.get(formkey).setValue("");
   });
+ }
+
+ //Anand
+ fromGraphItemsComponentUpdateHTMLComponent(contextID, pageID) {
+  let elementDetails = {
+   pageType: "Port",
+   elementID: contextID,
+   pageName: "Port",
+   pageID: pageID,
+  };
+  localStorage.setItem("pageType", "Port");
+  localStorage.setItem("elementID", contextID);
+  localStorage.setItem("pageName", "Port");
+  localStorage.setItem("pageID", pageID);
+  this.sendMessage(elementDetails);
+ }
+
+ fromGraphItemsComponentSelectNEtagElement(contextID) {
+  console.log("this.formElements : " + JSON.stringify(this.formElements));
+
+  let selectTagObj = this.formElements.find(
+   (val) => val.element_name === "NE" && val.element_type === "select"
+  );
+
+  console.log("selectTagObj : " + JSON.stringify(selectTagObj));
+
+  var selectTagElement = document.getElementById(
+   "bind" + selectTagObj.tab_element_id
+  ) as HTMLSelectElement;
+  for (var i = selectTagElement.options.length - 1; i >= 0; i--) {
+   selectTagElement.remove(i);
+  }
+
+  var defaultSelectOption = document.createElement("option");
+  defaultSelectOption.setAttribute("value", "-1");
+  defaultSelectOption.setAttribute("selected", "1");
+  defaultSelectOption.text = "Please Select";
+
+  selectTagElement.add(defaultSelectOption);
+
+  for (var j = 0; j < selectTagObj.element_options.length; j++) {
+   var additionalOptions = document.createElement("option");
+   additionalOptions.setAttribute(
+    "value",
+    selectTagObj.element_options[j].opt_id
+   );
+   additionalOptions.setAttribute(
+    "data-val",
+    selectTagObj.element_options[j].opt_selected_value
+   );
+   additionalOptions.text = selectTagObj.element_options[j].opt_value;
+   if (selectTagObj.element_options[j].opt_id == contextID) {
+    additionalOptions.setAttribute("selected", "selected");
+   }
+   selectTagElement.add(additionalOptions);
+  }
  }
 }
