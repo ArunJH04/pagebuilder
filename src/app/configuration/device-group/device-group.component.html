@@ -4,25 +4,49 @@
    <nav class="navbar navbar-expand-lg py-0 col align-self-end">
     <ul class="navbar-nav ml-auto">
      <li class="nav-item pt-25">
-      <span type="button" [routerLink]="routeToAddDetails()" class="btn btn-light btn-sm bc-n"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> </span>
+      <span
+       type="button"
+       class="btn btn-light btn-sm bc-n"
+       data-toggle="modal"
+       data-target="#CreateModal"
+       ><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+      </span>
      </li>
      <li class="nav-item dropdown">
-      <span type="button" class="nav-link btn btn-light btn-sm bc-n" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span
+       type="button"
+       class="nav-link btn btn-light btn-sm bc-n"
+       id="navbarDropdown"
+       role="button"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false"
+      >
        <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
       </span>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-       <a class="dropdown-item" href="#">View Config Backup</a>
-       <a class="dropdown-item" href="#">Compare Config Backup</a>
-       <a class="dropdown-item" href="#">Create Device Group</a>
-       <a class="dropdown-item" href="#">Delete Device</a>
-       <a class="dropdown-item" href="#">Schedule Run</a>
-       <div class="dropdown-divider"></div>
-       <a class="dropdown-item"> Download All Device</a>
+       <a class="dropdown-item" data-toggle="modal" data-target="#RenameModal"
+        >Rename Group</a
+       >
+       <a class="dropdown-item" (click)="deleteSelectedGroup()">Delete Group</a>
+       <a class="dropdown-item" (click)="EnableSelectedGroup(1)"
+        >Enable Group</a
+       >
+       <a class="dropdown-item" (click)="EnableSelectedGroup(0)"
+        >Disable Group</a
+       >
       </div>
      </li>
     </ul>
    </nav>
-   <i *ngIf="leftDivShow" href="#demo" (click)="leftDivClick()" data-toggle="collapse" class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div" aria-hidden="true"></i>
+   <i
+    *ngIf="leftDivShow"
+    href="#demo"
+    (click)="leftDivClick()"
+    data-toggle="collapse"
+    class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div"
+    aria-hidden="true"
+   ></i>
   </div>
 
   <table class="table table-hover table-borderless mb-0">
@@ -31,9 +55,18 @@
      <td colspan="2">
       <div class="input-group input-focus">
        <div class="input-group-prepend">
-        <span class="input-group-text" style="background-color: #f8faf9"><i class="fa fa-search"></i></span>
+        <span class="input-group-text" style="background-color: #f8faf9"
+         ><i class="fa fa-search"></i
+        ></span>
        </div>
-       <input type="search" style="background-color: #f8faf9" placeholder="Search" id="name" (keyup)="filterValues($event)" class="form-control border-left-0" />
+       <input
+        type="search"
+        style="background-color: #f8faf9"
+        placeholder="Search"
+        id="name"
+        (keyup)="filterValues($event)"
+        class="form-control border-left-0"
+       />
       </div>
      </td>
      <td class="align-middle">
@@ -42,15 +75,30 @@
     </tr>
 
     <tr *ngFor="let ValbyGrp of deviceGroup" class="border-bottom">
-     <th scope="row" class="w5"><input type="checkbox" id="{{ ValbyGrp.id }}" class="chksize" /></th>
-     <td colspan="3" class="f16" (click)="getRecord(ValbyGrp)"><img src="../../../assets/grpadmin.png" /> &nbsp; {{ ValbyGrp.groupName }}</td>
+     <th scope="row" class="w5">
+      <input
+       type="checkbox"
+       (click)="selectID($event, 'Group')"
+       id="{{ ValbyGrp.id }}"
+       class="chksize"
+      />
+     </th>
+     <td colspan="3" class="f16" (click)="getRecord(ValbyGrp)">
+      <img src="../../../assets/grpadmin.png" /> &nbsp; {{ ValbyGrp.groupName }}
+     </td>
     </tr>
    </tbody>
   </table>
  </div>
  <div class="customSlider border-right border-top mt-1" *ngIf="rightDivShow">
   <img src="../../../assets/new-device-slider.png" alt="" />
-  <i href="#demo" data-toggle="collapse" (click)="rightDivClick()" class="fa fa-caret-right fa-2x" aria-hidden="true"></i>
+  <i
+   href="#demo"
+   data-toggle="collapse"
+   (click)="rightDivClick()"
+   class="fa fa-caret-right fa-2x"
+   aria-hidden="true"
+  ></i>
  </div>
  <div class="col outerBox" style="min-height: 82vh">
   <div class="ml-1 mr-2 mt-1" style="min-height: 82vh">
@@ -102,40 +150,62 @@
      </tbody>
     </table>
    </div>
-   <div class="row p-5 border bg-white">
+   <div class="row p-5 border bg-white" *ngIf="EditGroup">
     <div style="width: 100%">
      <div class="border-bottom" style="width: 100%">
       <div class="f18 dv90">DEVICES</div>
       <div>
        <img src="../../../assets/plus.png" /> &nbsp;&nbsp;
-       <img src="../../../assets/delete.png" />
+       <a (click)="deleteSelectedDevice()">
+        <img src="../../../assets/delete.png"
+       /></a>
       </div>
      </div>
      <br />
-     <div style="width: 100%">
+     <div style="width: 100%" *ngIf="DeviceList">
       <table class="tblstyle">
        <thead>
         <tr class="border-bottom">
          <th style="width: 20%">Device Name</th>
-         <th style="width: 15%">IP Address</th>
-         <th style="width: 10%">Backup</th>
-         <th style="width: 20%">Last Run</th>
-         <th style="width: 20%">Next Run</th>
-         <th style="width: 15%">Vendor</th>
+         <th style="width: 12%">IP Address</th>
+         <th style="width: 8%">Backup</th>
+         <th style="width: 18%">Last Run</th>
+         <th style="width: 16%">Reattempt Schedule</th>
+         <th style="width: 18%">Next Run</th>
+         <th style="width: 8%">Vendor</th>
         </tr>
        </thead>
 
        <tbody>
         <tr *ngFor="let DatabyID of allDevices" class="border-bottom">
-         <td style="width: 20%"><input type="checkbox" id="{{ DatabyID.deviceId }}" /> &nbsp; &nbsp;{{ DatabyID.deviceName }}</td>
-         <td style="width: 15%">{{ DatabyID.deviceIp }}</td>
-         <td style="width: 10%">{{ DatabyID.isenabled }}</td>
-         <td style="width: 20%">{{ DatabyID.lastrun }}</td>
-         <td style="width: 20%">{{ DatabyID.nextrun }}</td>
-         <td style="width: 15%">{{ DatabyID.vendor }}</td>
+         <td style="width: 20%">
+          <input
+           type="checkbox"
+           (click)="selectID($event, 'Device')"
+           id="{{ DatabyID.deviceId }}"
+          />
+          &nbsp; &nbsp;{{ DatabyID.deviceName }}
+         </td>
+         <td style="width: 12%">{{ DatabyID.deviceIp }}</td>
+         <td style="width: 8%">{{ DatabyID.isenabled }}</td>
+         <td style="width: 18%">{{ DatabyID.lastrun }}</td>
+         <td style="width: 16%">{{ DatabyID.reattempt }}</td>
+         <td style="width: 18%">{{ DatabyID.nextrun }}</td>
+         <td style="width: 8%">{{ DatabyID.vendor }}</td>
         </tr>
        </tbody>
       </table>
+     </div>
+     <div
+      class="p-255"
+      style="width: 100%; text-align: center"
+      *ngIf="EmptyDeviceList"
+     >
+      <img src="../../../assets/empty.png" />
+      <br />
+      No devices added.
+      <br />
+      Add Devices.
      </div>
     </div>
     <br />
@@ -144,11 +214,13 @@
       <div class="f18 dv90">USERS</div>
       <div>
        <img src="../../../assets/plus.png" /> &nbsp;&nbsp;
-       <img src="../../../assets/delete.png" />
+       <a (click)="deleteSelectedUser()">
+        <img src="../../../assets/delete.png" />
+       </a>
       </div>
      </div>
      <br />
-     <div class="p-255" style="width: 100%">
+     <div class="p-255" style="width: 100%" *ngIf="UserList">
       <table class="tblstyle">
        <thead>
         <tr class="border-bottom">
@@ -161,7 +233,14 @@
 
        <tbody>
         <tr *ngFor="let usrdatabyID of allUsers" class="border-bottom">
-         <td style="width: 25%"><input type="checkbox" id="{{ usrdatabyID.id }}" /> &nbsp; &nbsp;{{ usrdatabyID.username }}</td>
+         <td style="width: 25%">
+          <input
+           type="checkbox"
+           (click)="selectID($event, 'User')"
+           id="{{ usrdatabyID.id }}"
+          />
+          &nbsp; &nbsp;{{ usrdatabyID.username }}
+         </td>
          <td style="width: 25%">{{ usrdatabyID.logintype }}</td>
          <td style="width: 25%">{{ usrdatabyID.loginport }}</td>
          <td style="width: 25%">{{ usrdatabyID.deviceName }}</td>
@@ -169,7 +248,111 @@
        </tbody>
       </table>
      </div>
+     <div
+      class="p-255"
+      style="width: 100%; text-align: center"
+      *ngIf="EmptyUserList"
+     >
+      <img src="../../../assets/empty.png" />
+      <br />
+      No users added.
+      <br />
+      Add Users.
+     </div>
     </div>
+   </div>
+   <div class="row p-5 border bg-white" *ngIf="CreateGroup">
+    <div
+     class="p-255"
+     style="width: 100%; text-align: center"
+     *ngIf="EmptyGroupList"
+    >
+     <img src="../../../assets/empty.png" />
+     <br />
+     No device group added.
+     <br />
+     Create a new group.
+    </div>
+    <br />
+    <div class="p-255" style="width: 100%; text-align: center">
+     <button
+      class="btn btn-primary btn-sm mr-2 txtbold"
+      type="button"
+      id="btnCreat"
+      data-toggle="modal"
+      data-target="#CreateModal"
+     >
+      CREATE GROUP
+     </button>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- Create Group modal  -->
+<div
+ class="modal fade bd-example-modal-sm"
+ id="CreateModal"
+ tabindex="-1"
+ role="dialog"
+ aria-labelledby="exampleModalLabel"
+ aria-hidden="true"
+>
+ <div class="modal-dialog" role="document">
+  <div class="modal-content">
+   <div class="modal-header">
+    <h5 class="modal-title">CREATE DEVICE GROUP</h5>
+   </div>
+   <div class="modal-body col-12">
+    <form>
+     <div class="form-group">
+      <label for="change-schedule" class="col-form-label">New Group </label>
+      <input class="form-control form-control-sm" id="txtgrpName" />
+     </div>
+    </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+     Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="GroupSave()">
+     Save
+    </button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- Rename Group modal  -->
+<div
+ class="modal fade bd-example-modal-sm"
+ id="RenameModal"
+ tabindex="-1"
+ role="dialog"
+ aria-labelledby="exampleModalLabel"
+ aria-hidden="true"
+>
+ <div class="modal-dialog" role="document">
+  <div class="modal-content">
+   <div class="modal-header">
+    <h5 class="modal-title">RENAME DEVICE GROUP</h5>
+   </div>
+   <div class="modal-body col-12">
+    <form>
+     <div class="form-group">
+      <label for="change-schedule" class="col-form-label">Rename Group </label>
+      <input class="form-control form-control-sm" id="txtRenamegrp" />
+     </div>
+    </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+     Cancel
+    </button>
+    <button type="button" class="btn btn-primary" (click)="RenameGroup()">
+     Update
+    </button>
    </div>
   </div>
  </div>

@@ -46,5 +46,8 @@ th {
 .tblstyle {
  margin-bottom: 50px;
  width: 100%;
- font-size: 16px;
+ font-size: 14px;
+}
+.txtbold {
+ font-weight: bold;
 }
