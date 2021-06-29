@@ -36,15 +36,22 @@ export class DeviceAdminComponent implements OnInit {
  deviceAdminDtls;
  showToolbar: boolean = true;
 
- contentObservable: Subject<DiffCompareConfig> = new Subject<DiffCompareConfig>();
- contentObservable$: Observable<DiffCompareConfig> = this.contentObservable.asObservable();
+ contentObservable: Subject<DiffCompareConfig> =
+  new Subject<DiffCompareConfig>();
+ contentObservable$: Observable<DiffCompareConfig> =
+  this.contentObservable.asObservable();
 
  deviceStatus = [
   { id: 0, value: "Disabled" },
   { id: 1, value: "Enabled" },
  ];
 
- constructor(private router: Router, private configurationService: ConfigurationService, private route: ActivatedRoute, private appService: ServiceService) {
+ constructor(
+  private router: Router,
+  private configurationService: ConfigurationService,
+  private route: ActivatedRoute,
+  private appService: ServiceService
+ ) {
   this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
    //message contains the data sent from service
    this.messageReceived = message.text;
@@ -67,8 +74,14 @@ export class DeviceAdminComponent implements OnInit {
 
   this.configurationService.getCompareFileInfo().subscribe((data: any) => {
    this.compareTextContent = data;
-   this.leftSideCompareVar = this.compareTextContent[0].replace(/[\r\"\']/g, "");
-   this.rightSideCompareVar = this.compareTextContent[1].replace(/[\r\"\']/g, "");
+   this.leftSideCompareVar = this.compareTextContent[0].replace(
+    /[\r\"\']/g,
+    ""
+   );
+   this.rightSideCompareVar = this.compareTextContent[1].replace(
+    /[\r\"\']/g,
+    ""
+   );
   });
 
   this.showToolbar = false;
@@ -117,42 +130,76 @@ export class DeviceAdminComponent implements OnInit {
   this.contentObservable.next(newContent);
 
   setTimeout(() => {
-   var tdLeftHeadElements = document.getElementsByClassName("fit-column line-number-col delete-row");
-   var tdLeftRearElements = document.getElementsByClassName("fit-column prefix-col delete-row");
-   var tdLeftContentElements = document.getElementsByClassName("content-col delete-row");
+   var tdLeftHeadElements = document.getElementsByClassName(
+    "fit-column line-number-col delete-row"
+   );
+   var tdLeftRearElements = document.getElementsByClassName(
+    "fit-column prefix-col delete-row"
+   );
+   var tdLeftContentElements = document.getElementsByClassName(
+    "content-col delete-row"
+   );
    var highLightElements = document.getElementsByClassName("highlight");
-   var tdRightHeadElements = document.getElementsByClassName("fit-column line-number-col insert-row");
-   var tdRightRearElements = document.getElementsByClassName("fit-column prefix-col insert-row");
-   var tdRightContentElements = document.getElementsByClassName("content-col insert-row");
+   var tdRightHeadElements = document.getElementsByClassName(
+    "fit-column line-number-col insert-row"
+   );
+   var tdRightRearElements = document.getElementsByClassName(
+    "fit-column prefix-col insert-row"
+   );
+   var tdRightContentElements = document.getElementsByClassName(
+    "content-col insert-row"
+   );
 
    for (var i = 0; i < tdLeftHeadElements.length; i++) {
-    tdLeftHeadElements[i].setAttribute("style", "background-color: #FFFF00 !important");
+    tdLeftHeadElements[i].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
    for (var j = 0; j < tdLeftRearElements.length; j++) {
-    tdLeftRearElements[j].setAttribute("style", "background-color: #FFFF00 !important");
+    tdLeftRearElements[j].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
    for (var k = 0; k < tdLeftContentElements.length; k++) {
-    tdLeftContentElements[k].setAttribute("style", "background-color: #FFFF00 !important");
+    tdLeftContentElements[k].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
 
    for (var l = 0; l < highLightElements.length; l++) {
-    highLightElements[l].setAttribute("style", "background-color: #FFFF00 !important");
+    highLightElements[l].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
 
    for (var m = 0; m < tdRightHeadElements.length; m++) {
-    tdRightHeadElements[m].setAttribute("style", "background-color: #FFFF00 !important");
+    tdRightHeadElements[m].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
 
    for (var n = 0; n < tdRightRearElements.length; n++) {
-    tdRightRearElements[n].setAttribute("style", "background-color: #FFFF00 !important");
+    tdRightRearElements[n].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
    for (var o = 0; o < tdRightContentElements.length; o++) {
-    tdRightContentElements[o].setAttribute("style", "background-color: #FFFF00 !important");
+    tdRightContentElements[o].setAttribute(
+     "style",
+     "background-color: #FFFF00 !important"
+    );
    }
   }, 0);
  }
 
  getRecord(elements) {
+  this.pageName = "Device Admin";
   let elementDetails = {
    pageType: this.pageName,
    elementID: elements.deviceId,
@@ -183,6 +230,7 @@ export class DeviceAdminComponent implements OnInit {
  }
 
  EditRecord(elements) {
+  this.pageName = "Device Admin";
   let elementDetails = {
    pageType: this.pageName,
    elementID: elements.deviceId,
