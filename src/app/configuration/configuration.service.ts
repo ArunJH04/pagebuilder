@@ -236,4 +236,15 @@ export class ConfigurationService {
    { headers: headers }
   );
  }
+
+ Updatedeviceschedule(dataObj): Observable<any> {
+  return this.http.put(
+   environment.configBaseUrl +
+    environment.configApiEndPoint.Updatedeviceschedule +
+    "/" +
+    dataObj.deviceId,
+   dataObj,
+   { headers: headers }
+  );
+ }
 }

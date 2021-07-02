@@ -4,15 +4,39 @@
    <nav class="navbar navbar-expand-lg py-0 col align-self-end">
     <ul class="navbar-nav ml-auto">
      <li class="nav-item pt-25">
-      <span type="button" [routerLink]="routeToAddDetails()" class="btn btn-light btn-sm bc-n"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> </span>
+      <span
+       type="button"
+       [routerLink]="routeToAddDetails()"
+       class="btn btn-light btn-sm bc-n"
+       ><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+      </span>
      </li>
      <li class="nav-item dropdown">
-      <span type="button" class="nav-link btn btn-light btn-sm bc-n" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span
+       type="button"
+       class="nav-link btn btn-light btn-sm bc-n"
+       id="navbarDropdown"
+       role="button"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false"
+      >
        <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
       </span>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
        <a class="dropdown-item" href="#">View Config Backup</a>
-       <a class="dropdown-item" data-target="#config_backup" data-toggle="modal" id="comapre_config" data-backdrop="static" data-keyboard="false" (click)="onCompareTextResults()" href="#config_backup">Compare Config Backup</a> <a class="dropdown-item" href="#">Create Device Group</a>
+       <a
+        class="dropdown-item"
+        data-target="#config_backup"
+        data-toggle="modal"
+        id="comapre_config"
+        data-backdrop="static"
+        data-keyboard="false"
+        (click)="onCompareTextResults()"
+        href="#config_backup"
+        >Compare Config Backup</a
+       >
+       <a class="dropdown-item" href="#">Create Device Group</a>
        <a class="dropdown-item" href="#">Delete Device</a>
        <a class="dropdown-item" href="#">Schedule Run</a>
        <div class="dropdown-divider"></div>
@@ -21,7 +45,14 @@
      </li>
     </ul>
    </nav>
-   <i *ngIf="leftDivShow" href="#demo" (click)="leftDivClick()" data-toggle="collapse" class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div" aria-hidden="true"></i>
+   <i
+    *ngIf="leftDivShow"
+    href="#demo"
+    (click)="leftDivClick()"
+    data-toggle="collapse"
+    class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div"
+    aria-hidden="true"
+   ></i>
   </div>
   <table class="table table-hover table-borderless mb-0">
    <tbody>
@@ -29,9 +60,18 @@
      <td colspan="2">
       <div class="input-group input-focus">
        <div class="input-group-prepend">
-        <span class="input-group-text" style="background-color: #f8faf9"><i class="fa fa-search"></i></span>
+        <span class="input-group-text" style="background-color: #f8faf9"
+         ><i class="fa fa-search"></i
+        ></span>
        </div>
-       <input type="search" style="background-color: #f8faf9" placeholder="Search" id="name" (keyup)="filterValues($event)" class="form-control border-left-0" />
+       <input
+        type="search"
+        style="background-color: #f8faf9"
+        placeholder="Search"
+        id="name"
+        (keyup)="filterValues($event)"
+        class="form-control border-left-0"
+       />
       </div>
      </td>
      <td class="align-middle">
@@ -48,7 +88,8 @@
      </td>
      <td class="text-nowrap text-right" (click)="getRecord(indVal)">
       <span *ngIf="indVal.is_enabled === 1" class="text-success"> Enabled</span>
-      <span *ngIf="indVal.is_enabled === 0" class="text-muted"> Disabled</span> |
+      <span *ngIf="indVal.is_enabled === 0" class="text-muted"> Disabled</span>
+      |
       <span *ngIf="indVal.is_new === 1" class="text-success">Passed </span>
       <span *ngIf="indVal.is_new === 0" class="text-danger">Failed </span>
      </td>
@@ -73,7 +114,13 @@
  </div>
  <div class="customSlider border-right border-top mt-1" *ngIf="rightDivShow">
   <img src="../../../assets/new-device-slider.png" alt="" />
-  <i href="#demo" data-toggle="collapse" (click)="rightDivClick()" class="fa fa-caret-right fa-2x" aria-hidden="true"></i>
+  <i
+   href="#demo"
+   data-toggle="collapse"
+   (click)="rightDivClick()"
+   class="fa fa-caret-right fa-2x"
+   aria-hidden="true"
+  ></i>
  </div>
  <div class="col outerBox">
   <div class="ml-1 mr-2 mt-1">
@@ -134,13 +181,26 @@
        <td class="col" style="width: 5%">
         <div>
          <div class="dropdown">
-          <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+          <button
+           class="btn btn-primary btn-sm dropdown-toggle"
+           type="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false"
+          >
+           Action
+          </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
            <a class="dropdown-item" (click)="EditRecord(ValbyID)">Edit</a>
            <div class="dropdown-divider"></div>
            <a class="dropdown-item" href="#">Show Configuration</a>
            <a class="dropdown-item" href="#">Adhoc Request</a>
-           <a class="dropdown-item" href="#">Change Schedule</a>
+           <a
+            class="dropdown-item"
+            data-toggle="modal"
+            data-target="#scheduleModal"
+            >Change Schedule</a
+           >
            <a class="dropdown-item" href="#">View Run Log</a>
           </div>
          </div>
@@ -260,7 +320,14 @@
    <!-- Modal content-->
    <div class="modal-content">
     <div class="modal-header" style="background-color: #234e54">
-     <button type="button" class="close" data-dismiss="modal" style="color: #fbf3f3">&times;</button>
+     <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      style="color: #fbf3f3"
+     >
+      &times;
+     </button>
     </div>
     <div id="scrollbox" class="modal-body">
      <div class="config_backup_leftVar">
@@ -270,13 +337,92 @@
       {{ rightSideCompareVar }}
      </div>
      <div id="ngxTextCompare" style="margin-top: 5px !important">
-      <td-ngx-text-diff id="ngxTextDiff" [left]="leftSideCompareVar" [right]="rightSideCompareVar" [diffContent]="contentObservable$" [showToolbar]="showToolbar"> </td-ngx-text-diff>
+      <td-ngx-text-diff
+       id="ngxTextDiff"
+       [left]="leftSideCompareVar"
+       [right]="rightSideCompareVar"
+       [diffContent]="contentObservable$"
+       [showToolbar]="showToolbar"
+      >
+      </td-ngx-text-diff>
      </div>
     </div>
 
     <div class="modal-footer" style="height: 15%">
-     <button type="button" class="btn btn-default compareBtn" data-dismiss="modal">Ok</button>
+     <button
+      type="button"
+      class="btn btn-default compareBtn"
+      data-dismiss="modal"
+     >
+      Ok
+     </button>
     </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- schedule modal  -->
+<div
+ class="modal fade bd-example-modal-sm"
+ id="scheduleModal"
+ tabindex="-1"
+ role="dialog"
+ aria-labelledby="exampleModalLabel"
+ aria-hidden="true"
+>
+ <div class="modal-dialog" style="height: 50%" role="document">
+  <div class="modal-content col-6">
+   <div class="modal-header">
+    <h5 class="modal-title">Change Schedule</h5>
+   </div>
+   <div class="modal-body">
+    <form>
+     <div class="form-group col-12" type="date">
+      <div style="float: left; clear: right" class="col-4">
+       <label for="change-schedule" class="col-form-label"
+        >Change Schedule:</label
+       >
+      </div>
+      <div style="float: left" class="col-8">
+       <input
+        type="datetime-local"
+        class="form-control form-control-sm"
+        id="txtChangeSchedule"
+       />
+      </div>
+      <br />
+     </div>
+     <div class="form-group col-12">
+      <div style="float: left; clear: right" class="col-4">
+       <label for="change-frequency" class="col-form-label"
+        >Change Frequency:</label
+       >
+      </div>
+      <div style="float: left" class="col-8">
+       <!-- <input type="text" class="form-control" id="txtChangeFrequency" /> -->
+       <select class="form-control form-control-sm" id="Changefrq">
+        <option [value]="-1" selected>Select schedule for frequency</option>
+        <option *ngFor="let frq of deviceFrequency" value="{{ frq.id }}">
+         {{ frq.value }}
+        </option>
+       </select>
+      </div>
+      <br />
+     </div>
+    </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+     Cancel
+    </button>
+    <button
+     type="button"
+     class="btn btn-primary"
+     (click)="ChangeScheduleSave()"
+    >
+     Save
+    </button>
    </div>
   </div>
  </div>

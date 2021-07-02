@@ -52,6 +52,7 @@ export const environment = {
   updateGroup: "/UpdatedeviceGroup",
   UpdateGroupIndevice: "/UpdateGroupIndevice",
   getAllDevloginUser: "/getAllDevloginUser",
+  Updatedeviceschedule: "/Updatedeviceschedule",
  },
  uid: "7",
  orderid: "1",
