@@ -1,4 +1,4 @@
-<div class="row ml-0 mr-0">
+<div class="row ml-0 mr-0" id="dvbody">
  <div id="demo" class="col-3 border box-inner collapse show mt-1 px-0">
   <div class="row border-bottom mx-0 mb-0">
    <nav class="navbar navbar-expand-lg py-0 col align-self-end">
@@ -25,9 +25,9 @@
        <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
       </span>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-       <a class="dropdown-item" data-toggle="modal" data-target="#RenameModal"
+       <!-- <a class="dropdown-item" data-toggle="modal" data-target="#RenameModal"
         >Rename Group</a
-       >
+       > -->
        <a class="dropdown-item" (click)="deleteSelectedGroup()">Delete Group</a>
        <a class="dropdown-item" (click)="EnableSelectedGroup(1)"
         >Enable Group</a
@@ -74,7 +74,10 @@
      </td>
     </tr>
 
-    <tr *ngFor="let ValbyGrp of deviceGroup" class="border-bottom">
+    <tr
+     *ngFor="let ValbyGrp of deviceGroup | filter: searchText"
+     class="border-bottom"
+    >
      <th scope="row" class="w5">
       <input
        type="checkbox"
@@ -83,8 +86,16 @@
        class="chksize"
       />
      </th>
-     <td colspan="3" class="f16" (click)="getRecord(ValbyGrp)">
+     <td colspan="2" class="f16" (click)="getRecord(ValbyGrp)">
       <img src="../../../assets/grpadmin.png" /> &nbsp; {{ ValbyGrp.groupName }}
+     </td>
+     <td (click)="getRecord(ValbyGrp)" style="text-align: right">
+      <span *ngIf="ValbyGrp.is_enabled === 1" class="text-success">
+       Enabled</span
+      >
+      <span *ngIf="ValbyGrp.is_enabled === 0" class="text-muted">
+       Disabled</span
+      >
      </td>
     </tr>
    </tbody>
@@ -155,7 +166,8 @@
      <div class="border-bottom" style="width: 100%">
       <div class="f18 dv90">DEVICES</div>
       <div>
-       <img src="../../../assets/plus.png" /> &nbsp;&nbsp;
+       <a (click)="openNav()"> <img src="../../../assets/plus.png" /> </a
+       >&nbsp;&nbsp;
        <a (click)="deleteSelectedDevice()">
         <img src="../../../assets/delete.png"
        /></a>
@@ -177,7 +189,7 @@
        </thead>
 
        <tbody>
-        <tr *ngFor="let DatabyID of allDevices" class="border-bottom">
+        <tr *ngFor="let DatabyID of DevicesInGroup" class="border-bottom">
          <td style="width: 20%">
           <input
            type="checkbox"
@@ -213,7 +225,9 @@
      <div class="border-bottom p-255" style="width: 100%">
       <div class="f18 dv90">USERS</div>
       <div>
-       <img src="../../../assets/plus.png" /> &nbsp;&nbsp;
+       <a (click)="openusrNav()"> <img src="../../../assets/plus.png" /> </a
+       >&nbsp;&nbsp;
+
        <a (click)="deleteSelectedUser()">
         <img src="../../../assets/delete.png" />
        </a>
@@ -224,26 +238,28 @@
       <table class="tblstyle">
        <thead>
         <tr class="border-bottom">
-         <th style="width: 25%">User Name</th>
-         <th style="width: 25%">Login Type</th>
-         <th style="width: 25%">Login Port</th>
-         <th style="width: 25%">Device Name</th>
+         <th style="width: 20%">User Name</th>
+         <th style="width: 20%">Login Type</th>
+         <th style="width: 20%">Login Port</th>
+         <th style="width: 20%">Device Name</th>
+         <th style="width: 20%">Backup</th>
         </tr>
        </thead>
 
        <tbody>
-        <tr *ngFor="let usrdatabyID of allUsers" class="border-bottom">
-         <td style="width: 25%">
+        <tr *ngFor="let usrdatabyID of UsersInGroup" class="border-bottom">
+         <td style="width: 20%">
           <input
            type="checkbox"
            (click)="selectID($event, 'User')"
-           id="{{ usrdatabyID.id }}"
+           id="{{ usrdatabyID.deviceId }}"
           />
           &nbsp; &nbsp;{{ usrdatabyID.username }}
          </td>
-         <td style="width: 25%">{{ usrdatabyID.logintype }}</td>
-         <td style="width: 25%">{{ usrdatabyID.loginport }}</td>
-         <td style="width: 25%">{{ usrdatabyID.deviceName }}</td>
+         <td style="width: 20%">{{ usrdatabyID.logintype }}</td>
+         <td style="width: 20%">{{ usrdatabyID.loginport }}</td>
+         <td style="width: 20%">{{ usrdatabyID.deviceName }}</td>
+         <td style="width: 20%">{{ usrdatabyID.isenabled }}</td>
         </tr>
        </tbody>
       </table>
@@ -356,4 +372,101 @@
    </div>
   </div>
  </div>
+</div>
+
+<!-- add device to group -->
+
+<div id="devicenav" class="sidenav">
+ <table class="table table-hover table-borderless mb-0">
+  <tr>
+   <td><h6>DEVICES</h6></td>
+   <td style="text-align: right">
+    <button type="button" class="btn btn-primary" (click)="addDeviceInGroup()">
+     ADD
+    </button>
+   </td>
+   <td style="text-align: right; width: 50px">
+    <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">X</a>
+   </td>
+  </tr>
+  <tr class="sticky-div">
+   <td colspan="3">
+    <div class="input-group input-focus">
+     <div class="input-group-prepend">
+      <span class="input-group-text" style="background-color: #f8faf9"
+       ><i class="fa fa-search"></i
+      ></span>
+     </div>
+     <input
+      type="search"
+      style="background-color: #f8faf9"
+      placeholder="Search"
+      id="name"
+      (keyup)="devfilterValues($event)"
+      class="form-control border-left-0"
+     />
+    </div>
+   </td>
+  </tr>
+
+  <tr *ngFor="let DatabyID of allDevices | filter: searchTextdev">
+   <td colspan="3">
+    <input
+     type="checkbox"
+     (click)="selectDevID($event)"
+     id="{{ DatabyID.deviceId }}"
+    />
+    &nbsp; &nbsp;{{ DatabyID.deviceName }}
+   </td>
+  </tr>
+ </table>
+</div>
+
+<!-- add user to group -->
+
+<div id="usernav" class="sidenav">
+ <table class="table table-hover table-borderless mb-0">
+  <tr>
+   <td><h6>USERS</h6></td>
+   <td style="text-align: right">
+    <button type="button" class="btn btn-primary" (click)="addUserInGroup()">
+     ADD
+    </button>
+   </td>
+   <td style="text-align: right; width: 50px">
+    <a href="javascript:void(0)" class="closebtn" (click)="closeusrNav()">X</a>
+   </td>
+  </tr>
+  <tr class="sticky-div">
+   <td colspan="3">
+    <div class="input-group input-focus">
+     <div class="input-group-prepend">
+      <span class="input-group-text" style="background-color: #f8faf9"
+       ><i class="fa fa-search"></i
+      ></span>
+     </div>
+     <input
+      type="search"
+      style="background-color: #f8faf9"
+      placeholder="Search"
+      id="name"
+      (keyup)="UsrfilterValues($event)"
+      class="form-control border-left-0"
+     />
+    </div>
+   </td>
+  </tr>
+
+  <tr *ngFor="let usrDatabyID of allUsers | filter: searchTextusr">
+   <td colspan="3">
+    <input
+     type="checkbox"
+     (click)="selectUsrID($event)"
+     id="{{ usrDatabyID.username }}"
+     value="{{ usrDatabyID.deviceID }}"
+    />
+    &nbsp; &nbsp;{{ usrDatabyID.username }}
+   </td>
+  </tr>
+ </table>
 </div>

@@ -50,6 +50,8 @@ export const environment = {
   DisableGroup: "/DisableGroup",
   createGroup: "/deviceGroup",
   updateGroup: "/UpdatedeviceGroup",
+  UpdateGroupIndevice: "/UpdateGroupIndevice",
+  getAllDevloginUser: "/getAllDevloginUser",
  },
  uid: "7",
  orderid: "1",

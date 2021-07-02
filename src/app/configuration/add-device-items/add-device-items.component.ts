@@ -136,7 +136,9 @@ export class AddDeviceItemsComponent implements OnInit {
   this.myFormGroup.value.uid = environment.uid;
 
   console.log("myFormGroup" + JSON.stringify(this.myFormGroup.value));
+  if (this.elementID === undefined) this.elementID = "";
   if (this.elementID != "") {
+   console.log("update");
    this.configurationService
     .updatePageValues(this.myFormGroup.value, this.elementID)
     .subscribe((res) => {
@@ -145,15 +147,12 @@ export class AddDeviceItemsComponent implements OnInit {
       this.notifier.notify("success", res.message);
       //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
      }
-     if (res.status == 0) {
-      this.notifier.notify("info", res.message);
-      //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
-     }
      if (res.status == 300) {
       this.notifier.notify("error", res.message);
      }
     });
   } else {
+   console.log("insert");
    this.configurationService
     .createPageValues(this.submitAction, this.myFormGroup.value)
     .subscribe((res) => {
@@ -161,9 +160,6 @@ export class AddDeviceItemsComponent implements OnInit {
      if (res.status == 200) {
       this.RefreshData();
       this.notifier.notify("success", res.message);
-     }
-     if (res.status == 0) {
-      this.notifier.notify("info", res.message);
      }
      if (res.status == 300) {
       this.notifier.notify("error", res.message);

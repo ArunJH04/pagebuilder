@@ -15,10 +15,14 @@ export class DeviceGroupComponent implements OnInit {
  pageId;
  pageName;
  searchText;
+ searchTextdev;
+ searchTextusr;
  deviceGroup;
  deviceGroupDlts;
  allDevices;
  allUsers;
+ DevicesInGroup;
+ UsersInGroup;
  DeviceList;
  UserList;
  EmptyDeviceList;
@@ -29,11 +33,16 @@ export class DeviceGroupComponent implements OnInit {
  SelectedgrpIDs: any = [];
  SelectedDevIDs: any = [];
  SelectedUsrIDs: any = [];
+
+ SelectedDevForAdd: any = [];
+ SelectedUsrForAdd: any = [];
+
  EditGroupID = 0;
  deviceStatus = [
   { id: 1, value: "Yes" },
   { id: 0, value: "No" },
  ];
+
  private notifier: NotifierService;
  constructor(
   private router: Router,
@@ -109,13 +118,13 @@ export class DeviceGroupComponent implements OnInit {
  }
 
  GetDeviceDtlsByGroup(Devgroupid) {
-  this.allDevices = null;
+  this.DevicesInGroup = null;
   this.DeviceList = null;
   this.configurationService
    .GetDevicesByGroup(Devgroupid)
    .subscribe((data: any) => {
     if (data.Datalist.length != 0) {
-     this.allDevices = data.Datalist;
+     this.DevicesInGroup = data.Datalist;
      this.DeviceList = data.Datalist;
      this.EmptyDeviceList = null;
     }
@@ -123,13 +132,13 @@ export class DeviceGroupComponent implements OnInit {
  }
 
  GetUserDtlsByGroup(Devgroupid) {
-  this.allUsers = null;
+  this.UsersInGroup = null;
   this.UserList = null;
   this.configurationService
    .GetUserByGroup(Devgroupid)
    .subscribe((data: any) => {
     if (data.Datalist.length != 0) {
-     this.allUsers = data.Datalist;
+     this.UsersInGroup = data.Datalist;
      this.UserList = data.Datalist;
      this.EmptyUserList = null;
     }
@@ -321,5 +330,122 @@ export class DeviceGroupComponent implements OnInit {
   } else {
    this.notifier.notify("error", "select at least one item to rename");
   }
+ }
+
+ // Add device to group functionality
+ async openNav() {
+  await this.GetAllDevices();
+  document.getElementById("devicenav").style.width = "250px";
+ }
+
+ closeNav() {
+  document.getElementById("devicenav").style.width = "0";
+ }
+
+ async GetAllDevices() {
+  this.configurationService.getDevices().subscribe((data: any) => {
+   this.allDevices = data;
+  });
+ }
+
+ devfilterValues(event) {
+  this.searchTextdev = event.target.value;
+ }
+ //=========store selected ID in a variable from checkbox for Add device in group==============
+ selectDevID(event: any) {
+  let valueExists1;
+  let id = this.SelectedDevForAdd.indexOf(event.target.id);
+  if (this.SelectedDevForAdd.indexOf(event.target.id) !== -1) {
+   valueExists1 = true;
+  } else {
+   valueExists1 = false;
+  }
+  if (event.target.checked && valueExists1 === false) {
+   this.SelectedDevForAdd.push(event.target.id);
+  } else {
+   this.SelectedDevForAdd.splice(id, 1);
+  }
+ }
+
+ addDeviceInGroup() {
+  this.configurationService
+   .UpdateGroupFordevices(this.SelectedDevForAdd, this.EditGroupID)
+   .subscribe((res) => {
+    // console.log(res);
+    if (res.status == 200) {
+     this.getDeviceGroupList();
+     this.notifier.notify("success", res.message);
+     this.closeNav();
+     this.SelectedDevForAdd = [];
+     this.GetallDataByID(this.EditGroupID, "Device Group");
+     this.GetDeviceDtlsByGroup(this.EditGroupID);
+     this.GetUserDtlsByGroup(this.EditGroupID);
+    }
+    if (res.status == 0) {
+     this.notifier.notify("info", res.message);
+    }
+    if (res.status == 300) {
+     this.notifier.notify("error", res.message);
+    }
+   });
+ }
+
+ // Add user to group functionality
+ async openusrNav() {
+  await this.GetAllUsers();
+  document.getElementById("usernav").style.width = "250px";
+ }
+
+ closeusrNav() {
+  document.getElementById("usernav").style.width = "0";
+ }
+
+ async GetAllUsers() {
+  this.configurationService.getAllloginUser().subscribe((data: any) => {
+   this.allUsers = data;
+  });
+ }
+
+ UsrfilterValues(event) {
+  this.searchTextusr = event.target.value;
+ }
+ //=========store selected ID in a variable from checkbox for Add device in group==============
+ selectUsrID(event: any) {
+  let valueExists1;
+  let id = this.SelectedUsrForAdd.indexOf(event.target.id);
+  if (this.SelectedUsrForAdd.indexOf(event.target.id) !== -1) {
+   valueExists1 = true;
+  } else {
+   valueExists1 = false;
+  }
+  if (event.target.checked && valueExists1 === false) {
+   this.SelectedUsrForAdd.push(event.target.value);
+  } else {
+   this.SelectedUsrForAdd.splice(id, 1);
+  }
+ }
+
+ addUserInGroup() {
+  console.log(this.SelectedUsrForAdd);
+  this.configurationService
+   .UpdateGroupFordevices(this.SelectedUsrForAdd, this.EditGroupID)
+   .subscribe((res) => {
+    // console.log(res);
+    if (res.status == 200) {
+     this.getDeviceGroupList();
+     this.notifier.notify("success", res.message);
+     this.closeusrNav();
+     this.SelectedUsrForAdd = [];
+     this.GetallDataByID(this.EditGroupID, "Device Group");
+     this.GetDeviceDtlsByGroup(this.EditGroupID);
+     this.GetUserDtlsByGroup(this.EditGroupID);
+    }
+    if (res.status == 0) {
+     this.notifier.notify("info", res.message);
+    }
+    if (res.status == 300) {
+     this.notifier.notify("error", res.message);
+    }
+   });
  }
 }

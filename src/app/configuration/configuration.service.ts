@@ -217,4 +217,23 @@ export class ConfigurationService {
    { headers: headers }
   );
  }
+
+ UpdateGroupFordevices(id, groupID): Observable<any> {
+  return this.http.post(
+   environment.configBaseUrl +
+    environment.configApiEndPoint.UpdateGroupIndevice +
+    "/" +
+    groupID +
+    "/" +
+    id,
+   { headers: headers }
+  );
+ }
+
+ getAllloginUser(): Observable<any> {
+  return this.http.get(
+   environment.configBaseUrl + environment.configApiEndPoint.getAllDevloginUser,
+   { headers: headers }
+  );
+ }
 }
