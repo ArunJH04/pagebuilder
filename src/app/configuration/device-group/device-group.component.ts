@@ -54,26 +54,18 @@ export class DeviceGroupComponent implements OnInit {
  }
 
  ngOnInit() {
-  this.EditGroup = null;
-  this.EditGroupID = 0;
-  this.CreateGroup = "1";
-  this.EmptyGroupList = "1";
+  this.Reset();
   this.route.params.subscribe((params: Params) => {
    this.pageId = params.id;
    this.pageName = params.pageName;
   });
   this.getDeviceGroupList();
-  //   this.configurationService.getDeviceGroup().subscribe((data: any) => {
-  //    this.allDevices = data;
-  //   });
-  //   this.configurationService.getUsers().subscribe((data: any) => {
-  //    this.allUsers = data;
-  //   });
  }
-
- routeToAddDetails() {
-  let url = "/configuration/add/" + this.pageName + "/" + this.pageId + "";
-  return url;
+ Reset() {
+  this.EditGroup = null;
+  this.EditGroupID = 0;
+  this.CreateGroup = "1";
+  this.EmptyGroupList = "1";
  }
 
  filterValues(event) {
@@ -92,7 +84,7 @@ export class DeviceGroupComponent implements OnInit {
 
  getDeviceGroupList() {
   this.configurationService.getDeviceGroup().subscribe((data: any) => {
-   console.log(data);
+   //console.log(data);
    //  for ()
    this.deviceGroup = data;
    this.EmptyGroupList = null;
@@ -100,16 +92,19 @@ export class DeviceGroupComponent implements OnInit {
  }
 
  getRecord(elements) {
+  this.BindRecord(elements.id);
+ }
+
+ BindRecord(id) {
   this.EditGroup = "1";
   this.CreateGroup = null;
   this.EmptyDeviceList = "1";
   this.EmptyUserList = "1";
-  this.EditGroupID = elements.id;
-  this.GetallDataByID(elements.id, "Device Group");
-  this.GetDeviceDtlsByGroup(elements.id);
-  this.GetUserDtlsByGroup(elements.id);
+  this.EditGroupID = id;
+  this.GetallDataByID(id, "Device Group");
+  this.GetDeviceDtlsByGroup(id);
+  this.GetUserDtlsByGroup(id);
  }
-
  GetallDataByID(id, type) {
   this.deviceGroupDlts = null;
   this.configurationService.EditDetailsByID(type, id).subscribe((data: any) => {
@@ -197,6 +192,9 @@ export class DeviceGroupComponent implements OnInit {
   if (selectedIdsArr.length > 0) {
    await this.DeleteData(selectedIdsArr, "Group");
    this.getDeviceGroupList();
+   this.SelectedgrpIDs = [];
+   this.Reset();
+   this.deviceGroupDlts = null;
   } else {
    this.notifier.notify("error", "select at least one item to delete");
   }
@@ -208,6 +206,7 @@ export class DeviceGroupComponent implements OnInit {
   if (selectedIdsArr.length > 0) {
    await this.DeleteData(selectedIdsArr, "Device");
    this.GetDeviceDtlsByGroup(this.EditGroupID);
+   this.SelectedDevIDs = [];
   } else {
    this.notifier.notify("error", "select at least one item to delete");
   }
@@ -218,6 +217,8 @@ export class DeviceGroupComponent implements OnInit {
   if (selectedIdsArr.length > 0) {
    await this.DeleteData(selectedIdsArr, "User");
    this.GetUserDtlsByGroup(this.EditGroupID);
+   this.GetDeviceDtlsByGroup(this.EditGroupID);
+   this.SelectedUsrIDs = [];
   } else {
    this.notifier.notify("error", "select at least one item to delete");
   }
@@ -244,6 +245,7 @@ export class DeviceGroupComponent implements OnInit {
   if (selectedIdsArr.length > 0) {
    await this.EnableData(selectedIdsArr, val);
    this.getDeviceGroupList();
+   this.SelectedgrpIDs = [];
   } else {
    if (val == 1) {
     this.notifier.notify("error", "select at least one item to Enable");
@@ -283,10 +285,13 @@ export class DeviceGroupComponent implements OnInit {
   this.configurationService
    .CreatedeviceGroup(elementDetails)
    .subscribe((res) => {
-    // console.log(res);
+    console.log(res);
     if (res.status == 200) {
      this.getDeviceGroupList();
      this.notifier.notify("success", res.message);
+     document.getElementById("closebutton").click();
+     let grpID = res.Datalist;
+     this.BindRecord(grpID);
     }
     if (res.status == 0) {
      this.notifier.notify("info", res.message);
@@ -374,9 +379,10 @@ export class DeviceGroupComponent implements OnInit {
     // console.log(res);
     if (res.status == 200) {
      this.getDeviceGroupList();
+     this.SelectedDevForAdd = [];
      this.notifier.notify("success", res.message);
      this.closeNav();
-     this.SelectedDevForAdd = [];
+
      this.GetallDataByID(this.EditGroupID, "Device Group");
      this.GetDeviceDtlsByGroup(this.EditGroupID);
      this.GetUserDtlsByGroup(this.EditGroupID);
@@ -433,9 +439,10 @@ export class DeviceGroupComponent implements OnInit {
     // console.log(res);
     if (res.status == 200) {
      this.getDeviceGroupList();
+     this.SelectedUsrForAdd = [];
      this.notifier.notify("success", res.message);
      this.closeusrNav();
-     this.SelectedUsrForAdd = [];
+
      this.GetallDataByID(this.EditGroupID, "Device Group");
      this.GetDeviceDtlsByGroup(this.EditGroupID);
      this.GetUserDtlsByGroup(this.EditGroupID);

@@ -78,6 +78,7 @@ export class ConfigurationService {
  }
 
  createPageValues(actionLink, data): Observable<any> {
+  console.log(actionLink);
   return this.http.post(actionLink, data, { headers: headers });
  }
  EditDeviceAdminByID(pageName, id): Observable<any> {
@@ -154,10 +155,9 @@ export class ConfigurationService {
   }
 
   if (elementName == "Device") {
-   // uri = environment.configBaseUrl + environment.configApiEndPoint.DeleteDevice;
-   return this.http.delete(
+   return this.http.post(
     environment.configBaseUrl +
-     environment.configApiEndPoint.DeleteDevice +
+     environment.configApiEndPoint.DisableDevice +
      "/" +
      id,
     { headers: headers }

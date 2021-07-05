@@ -53,8 +53,9 @@ export const environment = {
   UpdateGroupIndevice: "/UpdateGroupIndevice",
   getAllDevloginUser: "/getAllDevloginUser",
   Updatedeviceschedule: "/Updatedeviceschedule",
+  DisableDevice: "/DisableDevice",
  },
  uid: "7",
  orderid: "1",
- apikey: "http://192.168.0.106:3000/api",
+ apikey: "http://192.168.1.70:3000/api",
 };
