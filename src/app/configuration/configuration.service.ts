@@ -154,25 +154,28 @@ export class ConfigurationService {
    );
   }
 
-  if (elementName == "Device") {
+  if (elementName == "Device" || elementName == "User") {
+   let groupID = 0;
    return this.http.post(
     environment.configBaseUrl +
-     environment.configApiEndPoint.DisableDevice +
+     environment.configApiEndPoint.UpdateGroupIndevice +
+     "/" +
+     groupID +
      "/" +
      id,
     { headers: headers }
    );
   }
-  if (elementName == "User") {
-   //uri = environment.configBaseUrl + environment.configApiEndPoint.DeleteUsers;
-   return this.http.delete(
-    environment.configBaseUrl +
-     environment.configApiEndPoint.DeleteUsers +
-     "/" +
-     id,
-    { headers: headers }
-   );
-  }
+  //   if (elementName == "User") {
+  //    //uri = environment.configBaseUrl + environment.configApiEndPoint.DeleteUsers;
+  //    return this.http.delete(
+  //     environment.configBaseUrl +
+  //      environment.configApiEndPoint.DeleteUsers +
+  //      "/" +
+  //      id,
+  //     { headers: headers }
+  //    );
+  //   }
  }
 
  EnableData(id, value): Observable<any> {

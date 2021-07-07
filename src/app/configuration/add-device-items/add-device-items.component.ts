@@ -54,6 +54,7 @@ export class AddDeviceItemsComponent implements OnInit {
  currentModel: any[];
  //end declation for go js codes
  private notifier: NotifierService;
+ submitted = false;
 
  constructor(
   private router: Router,
@@ -84,7 +85,7 @@ export class AddDeviceItemsComponent implements OnInit {
      this.formElements.forEach((input_template) => {
       this.myFormGroup.addControl(
        input_template.api_param_name,
-       new FormControl("")
+       new FormControl("", Validators.required)
       );
      });
     });
@@ -128,99 +129,70 @@ export class AddDeviceItemsComponent implements OnInit {
  }
 
  onSubmit() {
-  this.formElements.forEach((element) => {
-   if (element.element_name === "Finish" && element.element_type === "button") {
-    this.submitAction = element.element_action;
-   }
-  });
-  this.myFormGroup.value.uid = environment.uid;
+  this.submitted = true;
+  if (this.myFormGroup.valid) {
+   this.formElements.forEach((element) => {
+    if (
+     element.element_name === "Finish" &&
+     element.element_type === "button"
+    ) {
+     this.submitAction = element.element_action;
+    }
+   });
+   this.myFormGroup.value.uid = environment.uid;
 
-  console.log("myFormGroup" + JSON.stringify(this.myFormGroup.value));
-  if (this.elementID === undefined) this.elementID = "";
-  if (this.elementID != "") {
-   console.log("update");
-   this.configurationService
-    .updatePageValues(this.myFormGroup.value, this.elementID)
-    .subscribe((res) => {
-     if (res.status == 200) {
-      this.RefreshData();
-      this.notifier.notify("success", res.message);
-      //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
+   for (const formkey of Object.keys(this.myFormGroup.controls)) {
+    let val = this.myFormGroup.get(formkey).value;
+
+    if (formkey != "0") {
+     if (val == "" || val == undefined) {
+      this.myFormGroup.get(formkey).setValue("-1");
      }
-     if (res.status == 300) {
-      this.notifier.notify("error", res.message);
-     }
-    });
+    }
+   }
+
+   console.log("myFormGroup" + JSON.stringify(this.myFormGroup.value));
+   if (this.elementID === undefined) this.elementID = "";
+   if (this.elementID != "") {
+    console.log("update");
+    this.configurationService
+     .updatePageValues(this.myFormGroup.value, this.elementID)
+     .subscribe((res) => {
+      if (res.status == 200) {
+       this.RefreshData();
+       this.notifier.notify("success", res.message);
+       //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
+      }
+      if (res.status == 300) {
+       this.notifier.notify("error", res.message);
+      }
+     });
+   } else {
+    console.log("insert");
+    this.configurationService
+     .createPageValues(this.submitAction, this.myFormGroup.value)
+     .subscribe((res) => {
+      // console.log(res);
+      if (res.status == 200) {
+       this.RefreshData();
+       this.notifier.notify("success", res.message);
+       console.log(this.pageName);
+       console.log(this.pageId);
+
+       this.router.navigate([
+        "/configuration/" + this.pageName + "/" + this.pageId,
+       ]);
+      }
+      if (res.status == 300) {
+       this.notifier.notify("error", res.message);
+      }
+     });
+   }
   } else {
-   console.log("insert");
-   this.configurationService
-    .createPageValues(this.submitAction, this.myFormGroup.value)
-    .subscribe((res) => {
-     // console.log(res);
-     if (res.status == 200) {
-      this.RefreshData();
-      this.notifier.notify("success", res.message);
-     }
-     if (res.status == 300) {
-      this.notifier.notify("error", res.message);
-     }
-    });
+   this.notifier.notify("error", "Please fill all the mandetory fields!");
+   //this.validateAllFormFields(this.myFormGroup); //{7}
   }
  }
-
- //  bindChildDropDownList(tab_element_id, child_element_id, event, element_action) {
- //   if (element_action != null) {
- //    var child_element_Value = event.target.value;
- //    const selectEl = event.target;
-
- //    const selectedVal = selectEl.options[selectEl.selectedIndex].getAttribute("data-val");
-
- //    // console.log('const val=' + selectedVal);
-
- //    if (selectedVal == "") {
- //     return;
- //    }
- //    this.http
- //     .get(element_action + "/" + child_element_id + "/" + selectedVal)
- //     .pipe(map((res) => JSON.parse(JSON.stringify(res))))
- //     .subscribe((data) => {
- //      if (data.status == "success") this.childOptionsList = data.child_options_list;
- //      for (let i = 0; i < this.childOptionsList.length; i++) {
- //       var childObj = this.childOptionsList[i];
- //       // console.log('val1=' + childObj.tabElementId);
- //       var element_id = childObj.tabElementId;
- //       var ElementType = childObj.tabElementType;
- //       var AtrribName = childObj.tabAtrribName;
- //       var child_element_options = childObj.tabelement_options;
- //       console.log(child_element_options);
- //       if (ElementType == 1) {
- //        console.log("input");
- //        let optval = "";
- //        $.each(child_element_options, function (key, value) {
- //         optval = value.opt_value;
- //         //   $("#" + AtrribName.trim()).val(x);
- //        });
- //        Object.keys(this.myFormGroup.controls).forEach(async (formkey) => {
- //         if (AtrribName == formkey) {
- //          this.myFormGroup.get(AtrribName).patchValue(optval);
- //         }
- //        });
- //       }
- //       if (ElementType == 4) {
- //        $("#bind" + element_id.trim())
- //         .find("option")
- //         .remove();
-
- //        $("#bind" + element_id).append($("<option></option>").attr("value", -1).attr("selected", 1).text("Please Select"));
-
- //        $.each(child_element_options, function (key, value) {
- //         $("#bind" + element_id).append($("<option></option>").attr("value", value.opt_id).attr("data-val", value.opt_selected_value).text(value.opt_value));
- //        });
- //       }
- //      }
- //     });
- //   }
- //  }
 
  discardFunc() {
   // this._location.back();
@@ -339,11 +311,31 @@ export class AddDeviceItemsComponent implements OnInit {
    .createPageItems(this.pageId)
    .subscribe((data: any) => {
     this.formElements = data.tabs_list[0].elements_list;
+    console.log(this.formElements);
     this.formElements.forEach((input_template) => {
-     this.myFormGroup.addControl(
-      input_template.api_param_name,
-      new FormControl("")
-     );
+     if (input_template.isRequired == 0) {
+      this.myFormGroup.addControl(
+       input_template.api_param_name,
+       new FormControl("")
+      );
+     } else {
+      this.myFormGroup.addControl(
+       input_template.api_param_name,
+       new FormControl("", Validators.required)
+      );
+
+      console.log(input_template.element_name);
+      // for (const formkey of Object.keys(this.myFormGroup.controls)) {
+      //  if (formkey == input_template.api_param_name) {
+      //   console.log(formkey);
+
+      //   var someElement = document.getElementById(formkey);
+      //   someElement.className += " required";
+      //  }
+      // }
+      // document.getElementById(input_template.api_param_name).style.border =
+      //  "red";
+     }
     });
    });
   this.EditsubscriptionName = this.appService

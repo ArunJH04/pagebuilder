@@ -3,6 +3,8 @@ import { ConfigurationService } from "../../configuration/configuration.service"
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import { NotifierService } from "angular-notifier";
 import { getLocaleDateFormat } from "@angular/common";
+import { ServiceService } from "../../service.service";
+import { Subscription } from "rxjs";
 @Component({
  selector: "app-device-group",
  templateUrl: "./device-group.component.html",
@@ -42,15 +44,28 @@ export class DeviceGroupComponent implements OnInit {
   { id: 1, value: "Yes" },
   { id: 0, value: "No" },
  ];
-
+ private subscriptionName: Subscription;
+ messageReceived: any;
  private notifier: NotifierService;
+ DeviceStatus;
+ Groupidval;
+
  constructor(
   private router: Router,
   private configurationService: ConfigurationService,
   private route: ActivatedRoute,
+  private appService: ServiceService,
   notifier: NotifierService
  ) {
   this.notifier = notifier;
+  // this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
+  //  //message contains the data sent from service
+  //  this.messageReceived = message.text;
+  //  this.DeviceStatus = this.messageReceived.Status;
+  //  this.Groupidval = this.messageReceived.Groupid;
+  //  console.log("this.Groupidval::" + this.Groupidval);
+  //  console.log("this.Status::" + this.DeviceStatus);
+  // });
  }
 
  ngOnInit() {
@@ -60,6 +75,11 @@ export class DeviceGroupComponent implements OnInit {
    this.pageName = params.pageName;
   });
   this.getDeviceGroupList();
+  this.DeviceStatus = localStorage.getItem("Status");
+  this.Groupidval = localStorage.getItem("Groupid");
+  if (this.DeviceStatus == "editDeviceGrp") {
+   this.BindRecord(this.Groupidval);
+  }
  }
  Reset() {
   this.EditGroup = null;
@@ -96,6 +116,7 @@ export class DeviceGroupComponent implements OnInit {
  }
 
  BindRecord(id) {
+  console.log("bindRecord::" + id);
   this.EditGroup = "1";
   this.CreateGroup = null;
   this.EmptyDeviceList = "1";
@@ -341,10 +362,13 @@ export class DeviceGroupComponent implements OnInit {
  async openNav() {
   await this.GetAllDevices();
   document.getElementById("devicenav").style.width = "250px";
+  document.getElementById("devicenav").style["boxShadow"] =
+   "0 0 0 99999px rgb(0 0 0 / 50%)";
  }
 
  closeNav() {
   document.getElementById("devicenav").style.width = "0";
+  document.getElementById("devicenav").style["boxShadow"] = "none";
  }
 
  async GetAllDevices() {
@@ -400,10 +424,13 @@ export class DeviceGroupComponent implements OnInit {
  async openusrNav() {
   await this.GetAllUsers();
   document.getElementById("usernav").style.width = "250px";
+  document.getElementById("usernav").style["boxShadow"] =
+   "0 0 0 99999px rgb(0 0 0 / 50%)";
  }
 
  closeusrNav() {
   document.getElementById("usernav").style.width = "0";
+  document.getElementById("usernav").style["boxShadow"] = "none";
  }
 
  async GetAllUsers() {

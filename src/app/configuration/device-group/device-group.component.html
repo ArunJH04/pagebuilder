@@ -163,7 +163,7 @@
    </div>
    <div class="row p-5 border bg-white" *ngIf="EditGroup">
     <div style="width: 100%">
-     <div class="border-bottom" style="width: 100%">
+     <div style="width: 100%">
       <div class="f18 dv90">DEVICES</div>
       <div>
        <a (click)="openNav()"> <img src="../../../assets/plus.png" /> </a
@@ -177,7 +177,7 @@
      <div style="width: 100%" *ngIf="DeviceList">
       <table class="tblstyle">
        <thead>
-        <tr class="border-bottom">
+        <tr class="border-bottom border-top">
          <th style="width: 20%">Device Name</th>
          <th style="width: 12%">IP Address</th>
          <th style="width: 8%">Backup</th>
@@ -222,7 +222,7 @@
     </div>
     <br />
     <div style="width: 100%">
-     <div class="border-bottom p-255" style="width: 100%">
+     <div class="p-255" style="width: 100%">
       <div class="f18 dv90">USERS</div>
       <div>
        <a (click)="openusrNav()"> <img src="../../../assets/plus.png" /> </a
@@ -237,7 +237,7 @@
      <div class="p-255" style="width: 100%" *ngIf="UserList">
       <table class="tblstyle">
        <thead>
-        <tr class="border-bottom">
+        <tr class="border-bottom border-top">
          <th style="width: 20%">User Name</th>
          <th style="width: 20%">Login Type</th>
          <th style="width: 20%">Login Port</th>
@@ -383,21 +383,34 @@
 
 <!-- add device to group -->
 
-<div id="devicenav" class="sidenav">
+<div id="devicenav" class="sidenav" style="margin-top: 44px">
  <table class="table table-hover table-borderless mb-0">
   <tr>
    <td><h6>DEVICES</h6></td>
    <td style="text-align: right">
-    <button type="button" class="btn btn-primary" (click)="addDeviceInGroup()">
+    <button
+     type="button"
+     class="btn btn-primary addbtn"
+     (click)="addDeviceInGroup()"
+     style="font-size: 11px"
+    >
      ADD
     </button>
-   </td>
-   <td style="text-align: right; width: 50px">
-    <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">X</a>
+    &nbsp;&nbsp;&nbsp;
+
+    <button
+     type="button"
+     class="close"
+     (click)="closeNav()"
+     style="color: #000"
+    >
+     &times;
+    </button>
+    <!-- <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">X</a> -->
    </td>
   </tr>
   <tr class="sticky-div">
-   <td colspan="3">
+   <td colspan="2">
     <div class="input-group input-focus">
      <div class="input-group-prepend">
       <span class="input-group-text" style="background-color: #f8faf9"
@@ -417,7 +430,7 @@
   </tr>
 
   <tr *ngFor="let DatabyID of allDevices | filter: searchTextdev">
-   <td colspan="3">
+   <td colspan="2">
     <input
      type="checkbox"
      (click)="selectDevID($event)"
@@ -431,21 +444,33 @@
 
 <!-- add user to group -->
 
-<div id="usernav" class="sidenav">
+<div id="usernav" class="sidenav" style="margin-top: 44px">
  <table class="table table-hover table-borderless mb-0">
   <tr>
    <td><h6>USERS</h6></td>
    <td style="text-align: right">
-    <button type="button" class="btn btn-primary" (click)="addUserInGroup()">
+    <button
+     type="button"
+     class="btn btn-primary addbtn"
+     (click)="addUserInGroup()"
+     style="font-size: 11px"
+    >
      ADD
     </button>
-   </td>
-   <td style="text-align: right; width: 50px">
-    <a href="javascript:void(0)" class="closebtn" (click)="closeusrNav()">X</a>
+    &nbsp;&nbsp;&nbsp;
+    <button
+     type="button"
+     class="close"
+     (click)="closeusrNav()"
+     style="color: #000"
+    >
+     &times;
+    </button>
+    <!-- <a href="javascript:void(0)" class="closebtn" (click)="closeusrNav()">X</a> -->
    </td>
   </tr>
   <tr class="sticky-div">
-   <td colspan="3">
+   <td colspan="2">
     <div class="input-group input-focus">
      <div class="input-group-prepend">
       <span class="input-group-text" style="background-color: #f8faf9"
@@ -465,7 +490,7 @@
   </tr>
 
   <tr *ngFor="let usrDatabyID of allUsers | filter: searchTextusr">
-   <td colspan="3">
+   <td colspan="2">
     <input
      type="checkbox"
      (click)="selectUsrID($event)"

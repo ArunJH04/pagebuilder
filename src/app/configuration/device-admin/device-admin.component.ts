@@ -223,6 +223,38 @@ export class DeviceAdminComponent implements OnInit {
   this.GetallDataByID(elementDetails.elementID, this.pageName);
  }
 
+ sendMessage(pageDetails): void {
+  // send message to subscribers via observable subject
+  this.appService.sendUpdate(pageDetails);
+ }
+ GetGroup(elements) {
+  let groupId = elements.deviceGroupId;
+  console.log(groupId);
+  this.configurationService.getMenuItems().subscribe((data: any) => {
+   let menuList = data.pages_list[0].pages;
+   for (let i = 0; i < menuList.length; i++) {
+    console.log(menuList[i].pageName);
+    if (menuList[i].pageName == "Device Group") {
+     let pgname = menuList[i].pageName;
+     let pgid = menuList[i].pageId;
+
+     localStorage.setItem("pageName", pgname);
+     localStorage.setItem("pageID", pgid);
+     localStorage.setItem("Status", "editDeviceGrp");
+     localStorage.setItem("Groupid", groupId);
+
+     //  let pageDetails = {
+     //   pageName: pgname,
+     //   pageID: pgid,
+     //   Status: "editDeviceGrp",
+     //   Groupid: groupId,
+     //  };
+     //  this.sendMessage(pageDetails);
+     this.router.navigate(["/configuration/" + pgname + "/" + pgid]);
+    }
+   }
+  });
+ }
  sendElementMessage(pageDetails): void {
   this.appService.sendUpdate(pageDetails);
  }

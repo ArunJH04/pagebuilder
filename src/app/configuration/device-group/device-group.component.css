@@ -46,7 +46,11 @@ th {
 .tblstyle {
  margin-bottom: 50px;
  width: 100%;
- font-size: 14px;
+ font-size: 13px;
+ font-family: Inter, sans-serif;
+ font-style: normal;
+ font-weight: 400;
+ line-height: 40px;
 }
 .txtbold {
  font-weight: bold;
@@ -85,6 +89,18 @@ th {
  right: 25px;
  font-size: 36px;
  margin-left: 50px;
+}
+.border-top {
+ border-top: 1px solid #dee2e6 !important;
+}
+.addbtn {
+ font-size: 11px;
+ padding: 0.25rem 0.5rem !important;
+ width: 55px;
+}
+.sidenav h6 {
+ margin-top: 12px;
+ font-size: 14px;
 }
 
 @media screen and (max-height: 450px) {

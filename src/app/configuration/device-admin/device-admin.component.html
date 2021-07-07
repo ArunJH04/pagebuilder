@@ -57,7 +57,7 @@
   <table class="table table-hover table-borderless mb-0">
    <tbody>
     <tr class="sticky-div">
-     <td colspan="2">
+     <td colspan="3">
       <div class="input-group input-focus">
        <div class="input-group-prepend">
         <span class="input-group-text" style="background-color: #f8faf9"
@@ -92,6 +92,14 @@
       |
       <span *ngIf="indVal.is_new === 1" class="text-success">Passed </span>
       <span *ngIf="indVal.is_new === 0" class="text-danger">Failed </span>
+     </td>
+     <td class="text-nowrap text-right">
+      <span *ngIf="indVal.deviceGroupId === null" class="text-danger"> </span>
+      <span *ngIf="indVal.deviceGroupId >= 0" class="text-success">
+       <a (click)="GetGroup(indVal)">
+        <img src="../../../assets/grpadmin.png" />
+       </a>
+      </span>
      </td>
     </tr>
     <!-- <tr *ngFor="let indVal of allDevices | filter: searchText">
