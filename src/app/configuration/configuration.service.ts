@@ -250,4 +250,14 @@ export class ConfigurationService {
    { headers: headers }
   );
  }
+
+ DeleteDevices(id): Observable<any> {
+  return this.http.delete(
+   environment.configBaseUrl +
+    environment.configApiEndPoint.DeleteDevice +
+    "/" +
+    id,
+   { headers: headers }
+  );
+ }
 }

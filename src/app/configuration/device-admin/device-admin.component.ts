@@ -25,6 +25,7 @@ export class DeviceAdminComponent implements OnInit {
  pageName;
  searchText;
  allDevices: any = [];
+ SelectedDevIDs: any = [];
 
  leftSideCompareVar: string;
  rightSideCompareVar: string;
@@ -69,12 +70,11 @@ export class DeviceAdminComponent implements OnInit {
   //    this.pageId = params.id;
   //    this.pageName = params.pageName;
   //   });
-  this.configurationService.getDevices().subscribe((data: any) => {
-   this.allDevices = data;
-  });
+
   //   this.getDeviceCommand();
   //   this.getDeviceFrequency();
   //   this.getDeviceGroup();
+  this.BindDeviceList();
   this.getDeviceFrequency();
   this.configurationService.getCompareFileInfo().subscribe((data: any) => {
    this.compareTextContent = data;
@@ -91,6 +91,11 @@ export class DeviceAdminComponent implements OnInit {
   this.showToolbar = false;
  }
 
+ BindDeviceList() {
+  this.configurationService.getDevices().subscribe((data: any) => {
+   this.allDevices = data;
+  });
+ }
  routeToAddDetails() {
   let url = "/configuration/add/" + this.pageName + "/" + this.pageId + "";
   return url;
@@ -391,5 +396,45 @@ export class DeviceAdminComponent implements OnInit {
  }
  public UpdatedeviceschedulefromAPI(dataObj): Promise<any> {
   return this.configurationService.Updatedeviceschedule(dataObj).toPromise();
+ }
+
+ selectID(event: any) {
+  let valueExists1;
+  let id = this.SelectedDevIDs.indexOf(event.target.id);
+  if (this.SelectedDevIDs.indexOf(event.target.id) !== -1) {
+   valueExists1 = true;
+  } else {
+   valueExists1 = false;
+  }
+  if (event.target.checked && valueExists1 === false) {
+   this.SelectedDevIDs.push(event.target.id);
+  } else {
+   this.SelectedDevIDs.splice(id, 1);
+  }
+ }
+ async deleteSelectedDevice() {
+  let selectedIdsArr = JSON.parse(JSON.stringify(this.SelectedDevIDs));
+  if (selectedIdsArr.length > 0) {
+   await this.DeleteData(selectedIdsArr);
+   this.SelectedDevIDs = [];
+   this.BindDeviceList();
+  } else {
+   this.notifier.notify("error", "select at least one item to delete");
+  }
+ }
+
+ async DeleteData(selectedId) {
+  for (let x of selectedId) {
+   var DataResponse = await this.RemoveElementata(x);
+   this.notifier.notify("success", DataResponse.message);
+  }
+ }
+
+ async RemoveElementata(obj) {
+  let response = await this.RemoveElementatafromAPI(obj);
+  return response;
+ }
+ public RemoveElementatafromAPI(obj): Promise<any> {
+  return this.configurationService.DeleteDevices(obj).toPromise();
  }
 }

@@ -176,12 +176,17 @@ export class AddDeviceItemsComponent implements OnInit {
       if (res.status == 200) {
        this.RefreshData();
        this.notifier.notify("success", res.message);
-       console.log(this.pageName);
-       console.log(this.pageId);
 
-       this.router.navigate([
-        "/configuration/" + this.pageName + "/" + this.pageId,
-       ]);
+       this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
+        this.router.navigate([
+         "/configuration/" + this.pageName + "/" + this.pageId,
+        ]);
+       });
+       // this.router
+       //     .navigate(["/configuration/" + this.pageName + "/" + this.pageId])
+       //     .then(() => {
+       //      window.location.reload();
+       //     });
       }
       if (res.status == 300) {
        this.notifier.notify("error", res.message);

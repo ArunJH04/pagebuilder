@@ -37,7 +37,9 @@
         >Compare Config Backup</a
        >
        <a class="dropdown-item" href="#">Create Device Group</a>
-       <a class="dropdown-item" href="#">Delete Device</a>
+       <a class="dropdown-item" (click)="deleteSelectedDevice()"
+        >Delete Device</a
+       >
        <a class="dropdown-item" href="#">Schedule Run</a>
        <div class="dropdown-divider"></div>
        <a class="dropdown-item"> Download All Device</a>
@@ -79,7 +81,13 @@
      </td>
     </tr>
     <tr *ngFor="let indVal of allDevices | filter: searchText">
-     <td scope="row"><input type="checkbox" id="{{ indVal.deviceId }}" /></td>
+     <td scope="row">
+      <input
+       type="checkbox"
+       id="{{ indVal.deviceId }}"
+       (click)="selectID($event)"
+      />
+     </td>
      <td class="py-1" (click)="getRecord(indVal)">
       {{ indVal.deviceName }} <br />
       <span class="font-weight-light p-0 m-0">
