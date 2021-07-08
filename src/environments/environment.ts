@@ -13,6 +13,7 @@ export const environment = {
   GetSlot: "/GetSlot",
   getMenu: "/getPageGroupPages",
   createPage: "/getTabsAndElements",
+  createConfigPage: "/getTabsAndElementsConfig",
   getDeviceDtl: "/getDeviceDtl",
   getShelfDtl: "/getShelfDtl",
   getPortDtl: "/getPortDtl",

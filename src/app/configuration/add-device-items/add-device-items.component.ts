@@ -55,6 +55,7 @@ export class AddDeviceItemsComponent implements OnInit {
  //end declation for go js codes
  private notifier: NotifierService;
  submitted = false;
+ uid = 1;
 
  constructor(
   private router: Router,
@@ -70,16 +71,15 @@ export class AddDeviceItemsComponent implements OnInit {
  ) {
   // this.spinner.show();
   this.notifier = notifier;
+
   this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
    //message contains the data sent from service
    this.messageReceived = message.text;
    this.pageName = this.messageReceived.pageName;
    this.pageId = this.messageReceived.pageID;
-   console.log("===add device page=====");
-   console.log(this.pageName, this.pageId);
 
    this.configurationService
-    .createPageItems(this.pageId)
+    .createPageItems(this.pageId, this.uid)
     .subscribe((data: any) => {
      this.formElements = data.tabs_list[0].elements_list;
      this.formElements.forEach((input_template) => {
@@ -99,7 +99,6 @@ export class AddDeviceItemsComponent implements OnInit {
     // this.pageType = this.listItemMsgReceived.pageType;
     this.elementID = this.listItemMsgReceived.elementID;
     this.funcType = this.listItemMsgReceived.funcType;
-    console.log("edit item:" + this.pageName + "-" + this.elementID);
     if (this.elementID != undefined) {
      this.GetallElementsByID(this.elementID, this.pageName, this.funcType);
     }
@@ -129,6 +128,7 @@ export class AddDeviceItemsComponent implements OnInit {
  }
 
  onSubmit() {
+  this.uid = 1;
   this.submitted = true;
   if (this.myFormGroup.valid) {
    this.formElements.forEach((element) => {
@@ -139,7 +139,7 @@ export class AddDeviceItemsComponent implements OnInit {
      this.submitAction = element.element_action;
     }
    });
-   this.myFormGroup.value.uid = environment.uid;
+   this.myFormGroup.value.uid = this.uid;
 
    for (const formkey of Object.keys(this.myFormGroup.controls)) {
     let val = this.myFormGroup.get(formkey).value;
@@ -162,6 +162,11 @@ export class AddDeviceItemsComponent implements OnInit {
        this.RefreshData();
        this.notifier.notify("success", res.message);
        //this.router.navigate(["/planning/list-items", { pageName: this.pageName, pageID: this.pageId }]);
+       this.router.navigateByUrl("/", { skipLocationChange: true }).then(() => {
+        this.router.navigate([
+         "/configuration/" + this.pageName + "/" + this.pageId,
+        ]);
+       });
       }
       if (res.status == 300) {
        this.notifier.notify("error", res.message);
@@ -241,43 +246,6 @@ export class AddDeviceItemsComponent implements OnInit {
    let val = dataDtls[0][formkey];
    this.myFormGroup.get(formkey).setValue(val);
    await this.sleep(50);
-   // this.spinner.show();
-   //  for (const input_template of this.formElements) {
-   //   if (input_template.api_param_name == formkey) {
-   //    if (input_template.child_elementid != null && input_template.child_elementid != 0) {
-   //     let url = input_template.element_action + "/" + input_template.child_elementid + "/" + val;
-
-   //     await this.http
-   //      .get(url)
-   //      .pipe(map((res) => JSON.parse(JSON.stringify(res))))
-   //      .subscribe((data) => {
-   //       if (data.status == "success") this.childOptionsList = data.child_options_list;
-   //       for (let i = 0; i < this.childOptionsList.length; i++) {
-   //        var childObj = this.childOptionsList[i];
-   //        var element_id = childObj.tabElementId;
-   //        var child_element_options = childObj.tabelement_options;
-
-   //        $("#bind" + element_id.trim())
-   //         .find("option")
-   //         .remove();
-
-   //        $("#bind" + element_id).append($("<option></option>").attr("value", -1).attr("selected", 1).text("Please Select"));
-
-   //        $.each(child_element_options, function (key, value) {
-   //         $("#bind" + element_id).append($("<option></option>").attr("value", value.opt_id).attr("data-val", value.opt_selected_value).text(value.opt_value));
-   //        });
-   //        console.log(element_id + " dropdown");
-   //        //this.myFormGroup.get(formkey).setValue(val);
-   //       }
-   //      });
-   //     await this.sleep(500);
-   //     this.myFormGroup.get(formkey).setValue(val);
-   //    }
-   //   }
-   //  }
-   //  await this.sleep(500);
-   //  this.myFormGroup.get(formkey).setValue(val);
-   //  this.spinner.hide();
   }
  }
 
@@ -313,7 +281,7 @@ export class AddDeviceItemsComponent implements OnInit {
 
  BindFormfield() {
   this.configurationService
-   .createPageItems(this.pageId)
+   .createPageItems(this.pageId, this.uid)
    .subscribe((data: any) => {
     this.formElements = data.tabs_list[0].elements_list;
     console.log(this.formElements);
@@ -328,21 +296,10 @@ export class AddDeviceItemsComponent implements OnInit {
        input_template.api_param_name,
        new FormControl("", Validators.required)
       );
-
-      console.log(input_template.element_name);
-      // for (const formkey of Object.keys(this.myFormGroup.controls)) {
-      //  if (formkey == input_template.api_param_name) {
-      //   console.log(formkey);
-
-      //   var someElement = document.getElementById(formkey);
-      //   someElement.className += " required";
-      //  }
-      // }
-      // document.getElementById(input_template.api_param_name).style.border =
-      //  "red";
      }
     });
    });
+
   this.EditsubscriptionName = this.appService
    .getUpdate()
    .subscribe((message) => {

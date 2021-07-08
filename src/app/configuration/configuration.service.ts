@@ -11,6 +11,8 @@ menuHeaders = headers
  .set("Content-Type", "application/json; charset=utf-8")
  .set("user_role", "1,2,3");
 
+let userHeaders = new HttpHeaders();
+
 @Injectable({
  providedIn: "root",
 })
@@ -70,10 +72,14 @@ export class ConfigurationService {
   );
  }
 
- createPageItems(id): Observable<any> {
+ createPageItems(id, uid): Observable<any> {
+  userHeaders = headers
+   .set("Content-Type", "application/json; charset=utf-8")
+   .set("uid", uid);
+  console.log(userHeaders);
   return this.http.get(
-   environment.baseUrl + environment.apiEndPoint.createPage + "/" + id,
-   { headers: headers }
+   environment.baseUrl + environment.apiEndPoint.createConfigPage + "/" + id,
+   { headers: userHeaders }
   );
  }
 
