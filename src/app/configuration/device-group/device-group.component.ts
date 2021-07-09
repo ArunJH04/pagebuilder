@@ -79,6 +79,10 @@ export class DeviceGroupComponent implements OnInit {
   this.Groupidval = localStorage.getItem("Groupid");
   if (this.DeviceStatus == "editDeviceGrp") {
    this.BindRecord(this.Groupidval);
+   this.DeviceStatus = "";
+   this.Groupidval = "";
+   localStorage.setItem("Status", "");
+   localStorage.setItem("Groupid", "");
   }
  }
  Reset() {
