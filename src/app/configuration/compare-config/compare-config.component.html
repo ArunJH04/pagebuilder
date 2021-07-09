@@ -1,8 +1,11 @@
-<div class="container-fluid pl-0 pb-4">
-  <i class="fa fa-home pr-3" aria-hidden="true"></i><i class="fa fa-angle-right px-3"
-    aria-hidden="true"></i>{{deviceData[0].deviceName}}<i class="fa fa-angle-right px-3" aria-hidden="true"></i>Compare
-  Config Backup
+<div class="container-fluid  pl-0 pb-4">
+  <i class="fa fa-home pr-3 cursor" (click)="routeHome()" aria-hidden="true"></i>
+  <span (click)="routeHome(deviceData[0].deviceId)">
+    <i class="fa fa-angle-right px-3" aria-hidden="true"> </i> <span class="cursor">{{deviceData[0].deviceName}}</span>
+  </span>
+  <i class="fa fa-angle-right px-3" aria-hidden="true"></i> <strong class="cursor">Compare Config Backup</strong>
 </div>
+
 <form [formGroup]="showConfigForm">
   <div class="row">
     <div class="col-4">

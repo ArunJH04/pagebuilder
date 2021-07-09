@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ConfigurationService } from '../configuration.service';
 import { Observable, Subject } from 'rxjs';
@@ -14,6 +14,8 @@ export interface DiffCompareConfig {
   styleUrls: ['./compare-config.component.css'],
 })
 export class CompareConfigComponent implements OnInit {
+  @Output() myEvent = new EventEmitter();
+
   closeResult = '';
   availableFile1Names: any = [];
   availableFile2Names: any = [];
@@ -57,6 +59,10 @@ export class CompareConfigComponent implements OnInit {
     this.showToolbar = false;
 
     console.log(this.deviceData[0].deviceId);
+  }
+
+  public routeHome(deviceId): void {
+    this.myEvent.emit(deviceId);
   }
 
   getSelecteditem1() {
