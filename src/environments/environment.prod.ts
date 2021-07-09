@@ -37,6 +37,7 @@ export const environment = {
     getAllDeviceFrequency: '/getAllDeviceFrequency',
     getUsers: '/getUsers',
     getCompareFilesInfo: '/getCompareFilesInfo',
+    showConfigFilesInfo: '/showConfigFilesInfo',
   },
   uid: '7',
   orderid: '1',

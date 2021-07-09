@@ -66,3 +66,40 @@ tbody tr {
   overflow-y: auto;
   max-height: calc(100vh - 150px);
 }
+
+::ng-deep .modal-dialog {
+  max-width: 80% !important;
+  height: 90%;
+  padding: 0;
+  margin: auto;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
+
+.header {
+  text-align: center;
+}
+
+.header h1 {
+  font-family: serif;
+  font-size: 38px;
+  font-family: 'Times New Roman';
+}
+
+.content {
+  margin: 100px;
+}
+
+.margin25 {
+  margin: 25px;
+}
+
+.upload {
+  cursor: pointer;
+}
+
+.deviceDetails strong {
+  font-size: 12px;
+}

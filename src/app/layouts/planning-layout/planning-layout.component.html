@@ -2,178 +2,186 @@
 <!-- <div class="container-fluid "> -->
 <!-- <div class="row"> -->
 <div class="text-center sideMenuBar border-top">
- <div class="mb-2 pt-2 pb-1 sideMenu" *ngFor="let indItem of menuList" [routerLinkActive]="'is-active'" [ngClass]="{ 'is-active': listActive.isActive || addActive.isActive }">
-  <a [routerLink]="routeMenu(indItem)" (click)="setValue(indItem)" class="text-decoration-none menu-color">
-   <img [src]="getImageUrl(indItem)" alt="" />
-   <p *ngIf="indItem.pageName != 'Circuit' && indItem.pageName != 'Topology'" class="pb-0">
-    {{ indItem.pageName }}
-   </p>
-  </a>
-  <a routerLink="/planning/list-items/{{ indItem.pageName }}/{{ indItem.pageId }}" routerLinkActive #listActive="routerLinkActive" style="display: none"></a>
-  <a routerLink="/planning/add-items/{{ indItem.pageName }}/{{ indItem.pageId }}" routerLinkActive #addActive="routerLinkActive" style="display: none"></a>
- </div>
+  <div class="mb-2 pt-2 pb-1 sideMenu" *ngFor="let indItem of menuList" [routerLinkActive]="'is-active'"
+    [ngClass]="{ 'is-active': listActive.isActive || addActive.isActive }">
+    <a [routerLink]="routeMenu(indItem)" (click)="setValue(indItem)" class="text-decoration-none menu-color">
+      <img [src]="getImageUrl(indItem)" alt="" />
+      <p *ngIf="indItem.pageName != 'Circuit' && indItem.pageName != 'Topology'" class="pb-0">
+        {{ indItem.pageName }}
+      </p>
+    </a>
+    <a routerLink="/planning/list-items/{{ indItem.pageName }}/{{ indItem.pageId }}" routerLinkActive
+      #listActive="routerLinkActive" style="display: none"></a>
+    <a routerLink="/planning/add-items/{{ indItem.pageName }}/{{ indItem.pageId }}" routerLinkActive
+      #addActive="routerLinkActive" style="display: none"></a>
+  </div>
 </div>
 
 <div class="rightContainer border">
- <div class="row ml-0 mr-0">
-  <div id="demo" class="col-3 border box-inner collapse show mt-1 px-0" style="height: 93vh; overflow: scroll">
-   <div class="row border-bottom mx-0 mb-0">
-    <nav class="navbar navbar-expand-lg py-0 col align-self-end">
-     <ul class="navbar-nav ml-auto">
-      <li class="nav-item pt-25">
-       <span type="button" (click)="showAddDiv()" class="btn btn-light btn-sm bc-n"><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> </span>
-      </li>
-      <li class="nav-item dropdown">
-       <span type="button" class="nav-link btn btn-light btn-sm bc-n" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-       </span>
-       <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width: 30px !important">
-        <a class="dropdown-item" (click)="deleteSelectedIds()" style="padding: 4px 10px">Delete</a>
-       </div>
-      </li>
-     </ul>
-    </nav>
-    <i *ngIf="leftDivShow" href="#demo" (click)="leftDivClick()" data-toggle="collapse" class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div" aria-hidden="true"></i>
-   </div>
+  <div class="row ml-0 mr-0">
+    <div id="demo" class="col-3 border box-inner collapse show mt-1 px-0" style="height: 93vh; overflow: scroll">
+      <div class="row border-bottom mx-0 mb-0">
+        <nav class="navbar navbar-expand-lg py-0 col align-self-end">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item pt-25">
+              <span type="button" (click)="showAddDiv()" class="btn btn-light btn-sm bc-n"><i
+                  class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> </span>
+            </li>
+            <li class="nav-item dropdown">
+              <span type="button" class="nav-link btn btn-light btn-sm bc-n" id="navbarDropdown" role="button"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+              </span>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="min-width: 30px !important">
+                <a class="dropdown-item" (click)="deleteSelectedIds()" style="padding: 4px 10px">Delete</a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <i *ngIf="leftDivShow" href="#demo" (click)="leftDivClick()" data-toggle="collapse"
+          class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div" aria-hidden="true"></i>
+      </div>
 
-   <app-list-items></app-list-items>
-  </div>
-  <div class="customSlider border-right border-top mt-1" *ngIf="rightDivShow">
-   <img src="../../../assets/new-device-slider.png" alt="" />
-   <i href="#demo" data-toggle="collapse" (click)="rightDivClick()" class="fa fa-caret-right fa-2x" aria-hidden="true"></i>
-  </div>
-  <div class="col outerBox">
-   <div class="ml-1 mr-2 mt-1">
-    <div class="row border p-3 deviceDetails">
-     <table style="width: 60%; margin-left: 40px">
-      <tbody>
-       <tr *ngFor="let ValbyID of deviceDtls">
-        <td *ngIf="ValbyID.name">
-         <div class="col">
-          {{ ValbyID.type }} Name
-          <div>
-           <strong>{{ ValbyID.name }}</strong>
-          </div>
-         </div>
-        </td>
+      <app-list-items></app-list-items>
+    </div>
+    <div class="customSlider border-right border-top mt-1" *ngIf="rightDivShow">
+      <img src="../../../assets/new-device-slider.png" alt="" />
+      <i href="#demo" data-toggle="collapse" (click)="rightDivClick()" class="fa fa-caret-right fa-2x"
+        aria-hidden="true"></i>
+    </div>
+    <div class="col-9 outerBox">
+      <div class="ml-1 mr-2 mt-1">
+        <div class="row border p-3 deviceDetails">
+          <table style="width: 60%; margin-left: 40px">
+            <tbody>
+              <tr *ngFor="let ValbyID of deviceDtls">
+                <td *ngIf="ValbyID.name">
+                  <div class="col">
+                    {{ ValbyID.type }} Name
+                    <div>
+                      <strong>{{ ValbyID.name }}</strong>
+                    </div>
+                  </div>
+                </td>
 
-        <td *ngIf="ValbyID.elementtype">
-         <div class="col">
-          {{ ValbyID.type }} Type
-          <div>
-           <strong>{{ ValbyID.elementtype }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.status">
-         <div class="col">
-          Status
-          <div>
-           <strong> <span *ngIf="ValbyID.status === 'Active'" class="text-success">Active </span> <span *ngIf="ValbyID.status === 'Inactive'" class="text-danger">Inactive </span> </strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.serialno">
-         <div class="col">
-          Serial
-          <div>
-           <strong>{{ ValbyID.serialno }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.loc">
-         <div class="col">
-          Location
-          <div>
-           <strong>{{ ValbyID.loc }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.ParentNE">
-         <div class="col">
-          NE
-          <div>
-           <strong>{{ ValbyID.ParentNE }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.Number">
-         <div class="col">
-          {{ ValbyID.type }} Number
-          <div>
-           <strong>{{ ValbyID.Number }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.objecttypID">
-         <div class="col">
-          Object Type ID
-          <div>
-           <strong>{{ ValbyID.objecttypID }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.Slot">
-         <div class="col">
-          Slot
-          <div>
-           <strong>{{ ValbyID.Slot }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.StartPort">
-         <div class="col">
-          Start Port
-          <div>
-           <strong>{{ ValbyID.StartPort }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.EndPort">
-         <div class="col">
-          End Port
-          <div>
-           <strong>{{ ValbyID.EndPort }}</strong>
-          </div>
-         </div>
-        </td>
-        <td *ngIf="ValbyID.Bandwidth">
-         <div class="col">
-          Bandwidth
-          <div>
-           <strong>{{ ValbyID.Bandwidth }}</strong>
-          </div>
-         </div>
-        </td>
-        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-        <td></td>
-       </tr>
-      </tbody>
-     </table>
-     <nav class="ml-auto mr-5">
-      <div class="nav nav-tabs" id="mytab" role="tablist">
-       <label class="switch">
-        <input type="checkbox" (click)="changeTab($event)" />
-        <span class="slider"></span>
-       </label>
-       <!-- <a class="nav-item active" id="nav-home-tab" data-toggle="tab" href="#nav-graph" role="tab"
+                <td *ngIf="ValbyID.elementtype">
+                  <div class="col">
+                    {{ ValbyID.type }} Type
+                    <div>
+                      <strong>{{ ValbyID.elementtype }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.status">
+                  <div class="col">
+                    Status
+                    <div>
+                      <strong> <span *ngIf="ValbyID.status === 'Active'" class="text-success">Active </span> <span
+                          *ngIf="ValbyID.status === 'Inactive'" class="text-danger">Inactive </span> </strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.serialno">
+                  <div class="col">
+                    Serial
+                    <div>
+                      <strong>{{ ValbyID.serialno }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.loc">
+                  <div class="col">
+                    Location
+                    <div>
+                      <strong>{{ ValbyID.loc }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.ParentNE">
+                  <div class="col">
+                    NE
+                    <div>
+                      <strong>{{ ValbyID.ParentNE }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.Number">
+                  <div class="col">
+                    {{ ValbyID.type }} Number
+                    <div>
+                      <strong>{{ ValbyID.Number }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.objecttypID">
+                  <div class="col">
+                    Object Type ID
+                    <div>
+                      <strong>{{ ValbyID.objecttypID }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.Slot">
+                  <div class="col">
+                    Slot
+                    <div>
+                      <strong>{{ ValbyID.Slot }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.StartPort">
+                  <div class="col">
+                    Start Port
+                    <div>
+                      <strong>{{ ValbyID.StartPort }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.EndPort">
+                  <div class="col">
+                    End Port
+                    <div>
+                      <strong>{{ ValbyID.EndPort }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td *ngIf="ValbyID.Bandwidth">
+                  <div class="col">
+                    Bandwidth
+                    <div>
+                      <strong>{{ ValbyID.Bandwidth }}</strong>
+                    </div>
+                  </div>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <nav class="ml-auto mr-5">
+            <div class="nav nav-tabs" id="mytab" role="tablist">
+              <label class="switch">
+                <input type="checkbox" (click)="changeTab($event)" />
+                <span class="slider"></span>
+              </label>
+              <!-- <a class="nav-item active" id="nav-home-tab" data-toggle="tab" href="#nav-graph" role="tab"
                 aria-controls="nav-home" aria-selected="true"><img src="../../../assets/tabicon.png" /></a>
               <a class="nav-item" id="nav-profile-tab" data-toggle="tab" href="#nav-Editdata" role="tab"
                 aria-controls="nav-profile" aria-selected="false"><img src="../../../assets/tabicon2.png" /></a> -->
+            </div>
+          </nav>
+        </div>
+        <!-- <div class="tab-content" id="nav-tabContent"> -->
+        <!-- <div class="tab-pane fade" id="nav-Editdata"  role="tabpanel" aria-labelledby="nav-home-tab"> -->
+        <div class="row p-5 border bg-white" [hidden]="showDiv1">
+          <app-add-items style="min-width: 100%"></app-add-items>
+        </div>
+        <!-- </div> -->
+        <div class="row p-5 border bg-white" [hidden]="showDiv2">
+          <app-graph-items style="min-width: 100%"></app-graph-items>
+        </div>
+        <!-- </div> -->
       </div>
-     </nav>
     </div>
-    <!-- <div class="tab-content" id="nav-tabContent"> -->
-    <!-- <div class="tab-pane fade" id="nav-Editdata"  role="tabpanel" aria-labelledby="nav-home-tab"> -->
-    <div class="row p-5 border bg-white" [hidden]="showDiv1">
-     <app-add-items style="min-width: 100%"></app-add-items>
-    </div>
-    <!-- </div> -->
-    <div class="row p-5 border bg-white" [hidden]="showDiv2">
-     <app-graph-items style="min-width: 100%"></app-graph-items>
-    </div>
-    <!-- </div> -->
-   </div>
   </div>
- </div>
 </div>

@@ -1,0 +1,20 @@
+div.settings {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-gap: 10px;
+}
+div.settings label {
+  text-align: right;
+}
+div.settings label:after {
+  content: ':';
+}
+
+div.settings label {
+  margin: 0.5rem !important;
+  margin-bottom: none !important;
+}
+
+.cursor {
+  cursor: pointer;
+}

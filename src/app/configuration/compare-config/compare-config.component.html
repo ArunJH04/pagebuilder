@@ -1,0 +1,103 @@
+<div class="container-fluid pl-0 pb-4">
+  <i class="fa fa-home pr-3" aria-hidden="true"></i><i class="fa fa-angle-right px-3"
+    aria-hidden="true"></i>{{deviceData[0].deviceName}}<i class="fa fa-angle-right px-3" aria-hidden="true"></i>Compare
+  Config Backup
+</div>
+<form [formGroup]="showConfigForm">
+  <div class="row">
+    <div class="col-4">
+      <div class="form-group">
+        <label for="Date">First Date</label>
+        <input type="datetime-local" class="form-control form-control-sm" formControlName="fDate" id="fDate" />
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="form-group">
+        <label for="Date">Second Date</label>
+        <input type="datetime-local" class="form-control form-control-sm" formControlName="sDate" id="sDate" />
+      </div>
+    </div>
+    <div class="col-4 text-right" style="top: 25px;">
+      <button class="btn btn-primary btn-sm mr-2" id="toggle" (click)="toggle();getFiles()">ADD FILES
+        TO COMPARE
+      </button>
+
+
+
+    </div>
+  </div>
+
+  <hr>
+  <div class="row" *ngIf="!fileContentDiv">
+    <p style="border: 1px solid grey; width: 100%; height: 50vh;" class="p-3 m-3 text-center"><img
+        src="../../../assets/compare-image.PNG" alt=""></p>
+  </div>
+  <div class="row" *ngIf="fileContentDiv" id="scrollbox">
+
+    <div class="col table-responsive" id="ngxTextCompare" style="margin-top: 5px !important">
+      <td-ngx-text-diff id="ngxTextDiff" [left]="leftSideCompareVar" [right]="rightSideCompareVar"
+        [diffContent]="contentObservable$" [showToolbar]="showToolbar"> </td-ngx-text-diff>
+    </div>
+  </div>
+
+</form>
+
+
+<div id="slider" class="slide-out">
+  <div class="container">
+    <div class="row text-center py-3">
+      <div class="pl-4 ">
+        <strong> ADD FILES TO COMPARE</strong>
+      </div>
+      <div class="col">
+        <button class="btn btn-primary btn-sm mr-2" type="button" (click)="getResults()">
+          COMPARE
+        </button>
+      </div>
+
+    </div>
+
+
+
+
+    <div class="row p-3">
+      <div class="input-group input-focus">
+        <div class="input-group-prepend">
+          <span class="input-group-text" style="background-color: #f8faf9"><i class="fa fa-search"></i></span>
+        </div>
+        <input type="search" style="background-color: #f8faf9" placeholder="Search" id="name"
+          (keyup)="filterValues($event)" class="form-control border-left-0" />
+      </div>
+    </div>
+
+
+    <div>
+      <p class="h6">First Date</p>
+      <ul style="list-style-type:none;">
+        <li class="py-2" *ngFor="let item of availableFile1Names">
+          <input type="radio" [(ngModel)]="radioSelected1" name="{{item}}" value="{{item}}"
+            (change)="onItem1Change(item)" />
+          {{item}}
+
+        </li>
+      </ul>
+    </div>
+
+
+    <div>
+      <p class="h6">Second Date</p>
+
+      <ul style="list-style-type:none;">
+        <li class="py-2" *ngFor="let item of availableFile2Names">
+          <input type="radio" [(ngModel)]="radioSelected2" name="{{item}}" value="{{item}}"
+            (change)="onItem2Change(item)" />
+          {{item}}
+
+        </li>
+      </ul>
+    </div>
+
+
+
+  </div>
+</div>
