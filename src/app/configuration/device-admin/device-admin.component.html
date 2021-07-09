@@ -1,66 +1,116 @@
 <div class="row ml-0 mr-0">
-  <div id="demo" class="col-3 border box-inner collapse show mt-1 px-0">
-    <div class="row border-bottom mx-0 mb-0">
-      <nav class="navbar navbar-expand-lg py-0 col align-self-end">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item pt-25">
-            <span type="button" [routerLink]="routeToAddDetails()" class="btn btn-light btn-sm bc-n"><i
-                class="fa fa-plus-circle fa-lg" aria-hidden="true"></i> </span>
-          </li>
-          <li class="nav-item dropdown">
-            <span type="button" class="nav-link btn btn-light btn-sm bc-n" id="navbarDropdown" role="button"
-              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
-            </span>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">View Config Backup</a>
-              <a class="dropdown-item" data-target="#config_backup" data-toggle="modal" id="comapre_config"
-                data-backdrop="static" data-keyboard="false" href="#config_backup">Compare Config Backup</a> <a
-                class="dropdown-item" href="#">Create Device
-                Group</a>
-              <a class="dropdown-item" href="#">Delete Device</a>
-              <a class="dropdown-item" href="#">Schedule Run</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item"> Download All Device</a>
-            </div>
-          </li>
-        </ul>
-      </nav>
-      <i *ngIf="leftDivShow" href="#demo" (click)="leftDivClick()" data-toggle="collapse"
-        class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div" aria-hidden="true"></i>
-    </div>
-    <table class="table table-hover table-borderless mb-0">
-      <tbody>
-        <tr class="sticky-div">
-          <td colspan="2">
-            <div class="input-group input-focus">
-              <div class="input-group-prepend">
-                <span class="input-group-text" style="background-color: #f8faf9"><i class="fa fa-search"></i></span>
-              </div>
-              <input type="search" style="background-color: #f8faf9" placeholder="Search" id="name"
-                (keyup)="filterValues($event)" class="form-control border-left-0" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <i class="fa fa-sliders fa-lg" aria-hidden="true"></i>
-          </td>
-        </tr>
-        <tr *ngFor="let indVal of allDevices | filter: searchText">
-          <td scope="row"><input type="checkbox" id="{{ indVal.deviceId }}" /></td>
-          <td class="py-1" (click)="getRecord(indVal)">
-            {{ indVal.deviceName }} <br />
-            <span class="font-weight-light p-0 m-0">
-              <small> IP : {{ indVal.deviceIp }} </small>
-            </span>
-          </td>
-          <td class="text-nowrap text-right" (click)="getRecord(indVal)">
-            <span *ngIf="indVal.is_enabled === 1" class="text-success"> Enabled</span>
-            <span *ngIf="indVal.is_enabled === 0" class="text-muted"> Disabled</span> |
-            <span *ngIf="indVal.is_new === 1" class="text-success">Passed </span>
-            <span *ngIf="indVal.is_new === 0" class="text-danger">Failed </span>
-          </td>
-        </tr>
-        <!-- <tr *ngFor="let indVal of allDevices | filter: searchText">
+ <div id="demo" class="col-3 border box-inner collapse show mt-1 px-0">
+  <div class="row border-bottom mx-0 mb-0">
+   <nav class="navbar navbar-expand-lg py-0 col align-self-end">
+    <ul class="navbar-nav ml-auto">
+     <li class="nav-item pt-25">
+      <span
+       type="button"
+       [routerLink]="routeToAddDetails()"
+       class="btn btn-light btn-sm bc-n"
+       ><i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+      </span>
+     </li>
+     <li class="nav-item dropdown">
+      <span
+       type="button"
+       class="nav-link btn btn-light btn-sm bc-n"
+       id="navbarDropdown"
+       role="button"
+       data-toggle="dropdown"
+       aria-haspopup="true"
+       aria-expanded="false"
+      >
+       <i class="fa fa-ellipsis-v fa-lg" aria-hidden="true"></i>
+      </span>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+       <a class="dropdown-item" href="#">View Config Backup</a>
+       <a
+        class="dropdown-item"
+        data-target="#config_backup"
+        data-toggle="modal"
+        id="comapre_config"
+        data-backdrop="static"
+        data-keyboard="false"
+        (click)="onCompareTextResults()"
+        href="#config_backup"
+        >Compare Config Backup</a
+       >
+       <a class="dropdown-item" href="#">Create Device Group</a>
+       <a class="dropdown-item" (click)="deleteSelectedDevice()"
+        >Delete Device</a
+       >
+       <a class="dropdown-item" href="#">Schedule Run</a>
+       <div class="dropdown-divider"></div>
+       <a class="dropdown-item"> Download All Device</a>
+      </div>
+     </li>
+    </ul>
+   </nav>
+   <i
+    *ngIf="leftDivShow"
+    href="#demo"
+    (click)="leftDivClick()"
+    data-toggle="collapse"
+    class="fa fa-caret-left fa-2x pull-right pr-2 pt-2 sticky-div"
+    aria-hidden="true"
+   ></i>
+  </div>
+  <table class="table table-hover table-borderless mb-0">
+   <tbody>
+    <tr class="sticky-div">
+     <td colspan="3">
+      <div class="input-group input-focus">
+       <div class="input-group-prepend">
+        <span class="input-group-text" style="background-color: #f8faf9"
+         ><i class="fa fa-search"></i
+        ></span>
+       </div>
+       <input
+        type="search"
+        style="background-color: #f8faf9"
+        placeholder="Search"
+        id="name"
+        (keyup)="filterValues($event)"
+        class="form-control border-left-0"
+       />
+      </div>
+     </td>
+     <td class="align-middle">
+      <i class="fa fa-sliders fa-lg" aria-hidden="true"></i>
+     </td>
+    </tr>
+    <tr *ngFor="let indVal of allDevices | filter: searchText">
+     <td scope="row">
+      <input
+       type="checkbox"
+       id="{{ indVal.deviceId }}"
+       (click)="selectID($event)"
+      />
+     </td>
+     <td class="py-1" (click)="getRecord(indVal)">
+      {{ indVal.deviceName }} <br />
+      <span class="font-weight-light p-0 m-0">
+       <small> IP : {{ indVal.deviceIp }} </small>
+      </span>
+     </td>
+     <td class="text-nowrap text-right" (click)="getRecord(indVal)">
+      <span *ngIf="indVal.is_enabled === 1" class="text-success"> Enabled</span>
+      <span *ngIf="indVal.is_enabled === 0" class="text-muted"> Disabled</span>
+      |
+      <span *ngIf="indVal.is_new === 1" class="text-success">Passed </span>
+      <span *ngIf="indVal.is_new === 0" class="text-danger">Failed </span>
+     </td>
+     <td class="text-nowrap text-right">
+      <span *ngIf="indVal.deviceGroupId === null" class="text-danger"> </span>
+      <span *ngIf="indVal.deviceGroupId >= 0" class="text-success">
+       <a (click)="GetGroup(indVal)">
+        <img src="../../../assets/grpadmin.png" />
+       </a>
+      </span>
+     </td>
+    </tr>
+    <!-- <tr *ngFor="let indVal of allDevices | filter: searchText">
      <td scope="row"><input type="checkbox" id="{{ indVal.deviceId }}" /></td>
      <td class="py-1">
       {{ indVal.deviceName }} <br />
@@ -75,320 +125,513 @@
       <span *ngIf="indVal.is_new === 0" class="text-danger">Failed </span>
      </td>
     </tr> -->
-      </tbody>
-    </table>
-  </div>
-  <div class="customSlider border-right border-top mt-1" *ngIf="rightDivShow">
-    <img src="../../../assets/new-device-slider.png" alt="" />
-    <i href="#demo" data-toggle="collapse" (click)="rightDivClick()" class="fa fa-caret-right fa-2x"
-      aria-hidden="true"></i>
-  </div>
-  <div class="col-9 outerBox">
-    <div class="ml-1 mr-2 mt-1">
-      <div *ngIf="showAddComponent" class="row border p-3 deviceDetails">
-        <table style="width: 100%">
-          <tbody>
-            <tr *ngFor="let ValbyID of deviceAdminDtls">
-              <td class="col" style="width: 15%">
-                <div>
-                  {{ ValbyID.type }} Name
-                  <div>
-                    <strong>{{ ValbyID.deviceName }}</strong>
-                  </div>
-                </div>
-              </td>
-              <td class="col" style="width: 15%">
-                <div>
-                  IP Address
-                  <div>
-                    <strong>{{ ValbyID.deviceIp }}</strong>
-                  </div>
-                </div>
-              </td>
-              <td class="col" style="width: 5%">
-                <div>
-                  Backup
-                  <div>
-                    <strong>
-                      <span class="text-success"> {{ ValbyID.isenabled }}</span>
-                    </strong>
-                  </div>
-                </div>
-              </td>
-              <td class="col" style="width: 20%">
-                <div>
-                  Next Run
-                  <div>
-                    <strong>{{ ValbyID.nextScheduledt }}</strong>
-                  </div>
-                </div>
-              </td>
-              <td class="col" style="width: 20%">
-                <div>
-                  Last Run
-                  <div>
-                    <strong>{{ ValbyID.lastSchedule }}</strong>
-                  </div>
-                </div>
-              </td>
-              <td class="col" style="width: 20%">
-                <div>
-                  {{ ValbyID.type }} Vendor
-                  <div>
-                    <strong>{{ ValbyID.vendor }}</strong>
-                  </div>
-                </div>
-              </td>
-              <td class="col" style="width: 5%">
-                <div>
-                  <div class="dropdown">
-                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown"
-                      aria-haspopup="true" aria-expanded="false">Action</button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" (click)="EditRecord(ValbyID)">Edit</a>
-                      <div class="dropdown-divider"></div>
-                      <!-- <a class="dropdown-item" (click)="open(showConfigModal);selectedDevice(deviceAdminDtls)">Show
+   </tbody>
+  </table>
+ </div>
+ <div class="customSlider border-right border-top mt-1" *ngIf="rightDivShow">
+  <img src="../../../assets/new-device-slider.png" alt="" />
+  <i
+   href="#demo"
+   data-toggle="collapse"
+   (click)="rightDivClick()"
+   class="fa fa-caret-right fa-2x"
+   aria-hidden="true"
+  ></i>
+ </div>
+ <div class="col-9 outerBox">
+  <div class="ml-1 mr-2 mt-1">
+   <div *ngIf="showAddComponent" class="row border p-3 deviceDetails">
+    <table style="width: 100%">
+     <tbody>
+      <tr *ngFor="let ValbyID of deviceAdminDtls">
+       <td class="col" style="width: 15%">
+        <div>
+         {{ ValbyID.type }} Name
+         <div>
+          <strong>{{ ValbyID.deviceName }}</strong>
+         </div>
+        </div>
+       </td>
+       <td class="col" style="width: 15%">
+        <div>
+         IP Address
+         <div>
+          <strong>{{ ValbyID.deviceIp }}</strong>
+         </div>
+        </div>
+       </td>
+       <td class="col" style="width: 5%">
+        <div>
+         Backup
+         <div>
+          <strong>
+           <span class="text-success"> {{ ValbyID.isenabled }}</span>
+          </strong>
+         </div>
+        </div>
+       </td>
+       <td class="col" style="width: 20%">
+        <div>
+         Next Run
+         <div>
+          <strong>{{ ValbyID.nextScheduledt }}</strong>
+         </div>
+        </div>
+       </td>
+       <td class="col" style="width: 20%">
+        <div>
+         Last Run
+         <div>
+          <strong>{{ ValbyID.lastSchedule }}</strong>
+         </div>
+        </div>
+       </td>
+       <td class="col" style="width: 20%">
+        <div>
+         {{ ValbyID.type }} Vendor
+         <div>
+          <strong>{{ ValbyID.vendor }}</strong>
+         </div>
+        </div>
+       </td>
+       <td class="col" style="width: 5%">
+        <div>
+         <div class="dropdown">
+          <button
+           class="btn btn-primary btn-sm dropdown-toggle"
+           type="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false"
+          >
+           Action
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+           <a class="dropdown-item" (click)="EditRecord(ValbyID)">Edit</a>
+           <div class="dropdown-divider"></div>
+           <!-- <a class="dropdown-item" (click)="open(showConfigModal);selectedDevice(deviceAdminDtls)">Show
                         Configuration</a> -->
-                      <a class="dropdown-item" (click)="viewConfig(deviceAdminDtls)">View Config Backup</a>
-                      <a class="dropdown-item" (click)="compConfig(deviceAdminDtls)">Compare Config Backup</a>
-                      <a class="dropdown-item" (click)="open(pushConfigModal)">Push Config</a>
+           <a class="dropdown-item" (click)="viewConfig(deviceAdminDtls)"
+            >View Config Backup</a
+           >
+           <a class="dropdown-item" (click)="compConfig(deviceAdminDtls)"
+            >Compare Config Backup</a
+           >
+           <a class="dropdown-item" (click)="open(pushConfigModal)"
+            >Push Config</a
+           >
 
-                      <a class="dropdown-item" (click)="open(adhocReqModal);getAdhocReqFiles(deviceAdminDtls)">Adhoc
-                        Request</a>
-                      <a class="dropdown-item" (click)="open(changeScheduleModal)">Change Schedule</a>
-                      <a class="dropdown-item" (click)="open(runLogModal);getAdhocReqFiles(deviceAdminDtls)">View Run
-                        Log</a>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+           <a
+            class="dropdown-item"
+            (click)="open(adhocReqModal); getAdhocReqFiles(deviceAdminDtls)"
+            >Adhoc Request</a
+           >
+           <a
+            class="dropdown-item"
+            data-toggle="modal"
+            data-target="#scheduleModal"
+            >Change Schedule</a
+           >
+           <a
+            class="dropdown-item"
+            (click)="open(runLogModal); getAdhocReqFiles(deviceAdminDtls)"
+            >View Run Log</a
+           >
+          </div>
+         </div>
+        </div>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
 
-      <div *ngIf="showAddComponent" class="row p-5 border bg-white">
-        <app-add-device-items style="min-width: 100%"></app-add-device-items>
-      </div>
-      <div *ngIf="showViewConfigComponent" class="row px-5 py-3 border bg-white">
-        <app-view-config (myEvent)="showAddComp();" style="min-width: 100%"></app-view-config>
-      </div>
-      <div *ngIf="showCompareConfigComponent" class="row px-5 py-3 border bg-white">
-        <app-compare-config style="min-width: 100%"></app-compare-config>
-      </div>
-    </div>
+   <div *ngIf="showAddComponent" class="row p-5 border bg-white">
+    <app-add-device-items style="min-width: 100%"></app-add-device-items>
+   </div>
+   <div *ngIf="showViewConfigComponent" class="row px-5 py-3 border bg-white">
+    <app-view-config
+     (myEvent)="showAddComp()"
+     style="min-width: 100%"
+    ></app-view-config>
+   </div>
+   <div
+    *ngIf="showCompareConfigComponent"
+    class="row px-5 py-3 border bg-white"
+   >
+    <app-compare-config style="min-width: 100%"></app-compare-config>
+   </div>
   </div>
-  <!-- Compare Config BackUp Model -->
-  <!-- Modal -->
-  <div class="modal fade" id="config_backup" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header" style="background-color: #234e54">
-          <button type="button" class="close" data-dismiss="modal" style="color: #fbf3f3">&times;</button>
-        </div>
-        <div id="scrollbox" class="modal-body">
-          <div class="config_backup_leftVar">
-            {{ leftSideCompareVar }}
-          </div>
-          <div class="config_backup_rightVar">
-            {{ rightSideCompareVar }}
-          </div>
-          <div id="ngxTextCompare" style="margin-top: 5px !important">
-            <td-ngx-text-diff id="ngxTextDiff" [left]="leftSideCompareVar" [right]="rightSideCompareVar"
-              [diffContent]="contentObservable$" [showToolbar]="showToolbar"> </td-ngx-text-diff>
-          </div>
-        </div>
-
-        <div class="modal-footer" style="height: 15%">
-          <button type="button" class="btn btn-default compareBtn" data-dismiss="modal">Ok</button>
-        </div>
-      </div>
+ </div>
+ <!-- Compare Config BackUp Model -->
+ <!-- Modal -->
+ <div class="modal fade" id="config_backup" role="dialog">
+  <div class="modal-dialog modal-lg">
+   <!-- Modal content-->
+   <div class="modal-content">
+    <div class="modal-header" style="background-color: #234e54">
+     <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      style="color: #fbf3f3"
+     >
+      &times;
+     </button>
     </div>
+    <div id="scrollbox" class="modal-body">
+     <div class="config_backup_leftVar">{{ leftSideCompareVar }}</div>
+     <div class="config_backup_rightVar">{{ rightSideCompareVar }}</div>
+     <div id="ngxTextCompare" style="margin-top: 5px !important">
+      <td-ngx-text-diff
+       id="ngxTextDiff"
+       [left]="leftSideCompareVar"
+       [right]="rightSideCompareVar"
+       [diffContent]="contentObservable$"
+       [showToolbar]="showToolbar"
+      >
+      </td-ngx-text-diff>
+     </div>
+    </div>
+
+    <div class="modal-footer" style="height: 15%">
+     <button
+      type="button"
+      class="btn btn-default compareBtn"
+      data-dismiss="modal"
+     >
+      Ok
+     </button>
+    </div>
+   </div>
   </div>
+ </div>
 
-  <!-- ng modal  -->
-  <ng-template #showConfigModal let-modal>
-    <form [formGroup]="showConfigForm">
-      <div class="modal-header" style="background-color: #234e54">
+ <!-- ng modal  -->
+ <ng-template #showConfigModal let-modal>
+  <form [formGroup]="showConfigForm">
+   <div class="modal-header" style="background-color: #234e54">
+    <h6 class="text-white">View Config Backup</h6>
+    <button
+     type="button"
+     class="close"
+     aria-label="Close"
+     (click)="modal.dismiss('Cross click')"
+     style="color: #fbf3f3"
+    >
+     &times;
+    </button>
+   </div>
 
-        <h6 class="text-white ">View Config Backup</h6>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
-          style="color: #fbf3f3">&times;</button>
+   <div class="modal-body">
+    <div class="row">
+     <div class="col-4">
+      <div class="form-group">
+       <div class="form-group">
+        <label for="deviceName">Device Name</label>
+        <select
+         class="form-control form-control-sm"
+         formControlName="deviceName"
+         id="deviceName"
+        >
+         <option [value]="-1" selected>Please Select</option>
+         <option *ngFor="let opt of allDevices" value="{{ opt.deviceId }}">
+          {{ opt.deviceName }}
+         </option>
+        </select>
+       </div>
       </div>
-
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-4">
-            <div class="form-group">
-              <div class="form-group">
-                <label for="deviceName">Device Name</label>
-                <select class="form-control form-control-sm" formControlName="deviceName" id="deviceName">
-                  <option [value]="-1" selected>Please Select</option>
-                  <option *ngFor="let opt of allDevices" value="{{ opt.deviceId }}">
-                    {{ opt.deviceName }}
-                  </option>
-                </select>
-              </div>
-
-
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="form-group">
-              <label for="Date">Date</label>
-              <input type="datetime-local" class="form-control form-control-sm" formControlName="date" id="date" />
-            </div>
-          </div>
-          <div class="col-4 text-center" style="top: 25px;">
-            <button class="btn btn-primary btn-sm mr-2" type="button" (click)="getFiles()" id="btnsave">View Config
-              Backup</button>
-          </div>
-        </div>
-        <h6>Available Files !!</h6>
-        <div class="row">
-          <div *ngFor="let file of availableFileNames">
-            <ul style="list-style-type:none;">
-              <li (click)="showFileDetails(file.fileContent)">
-                <input type="radio" name="{{file.fileName}}" id="{{file.fileName}}">
-                {{file.fileName}}
-              </li>
-            </ul>
-          </div>
-        </div>
-        <hr>
-        <div class="row" *ngIf="fileContentDiv">
-          <p style="box-shadow:         inset 0 0 10px #000000;" class="p-3 m-3">{{fileContent}}</p>
-        </div>
+     </div>
+     <div class="col-4">
+      <div class="form-group">
+       <label for="Date">Date</label>
+       <input
+        type="datetime-local"
+        class="form-control form-control-sm"
+        formControlName="date"
+        id="date"
+       />
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
-      </div>
-    </form>
-  </ng-template>
-  <!-- ng modal end -->
-
-  <!-- adhocReq modal -->
-  <ng-template #adhocReqModal let-modal>
-    <form [formGroup]="showConfigForm">
-      <div class="modal-header" style="background-color: #234e54">
-        <h6 class="text-white ">Adhoc Request</h6>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
-          style="color: #fbf3f3">&times;</button>
-      </div>
-      <div *ngFor="let file of availableFileNames">
-        <!-- File Name : {{file.fileName}} -->
-        <div class="modal-body">
-          <hr>
-          <div class="row">
-            <p style="box-shadow:         inset 0 0 10px #000000;" class="p-3 m-3">
-              {{file.fileContent}}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
-      </div>
-    </form>
-  </ng-template>
-
-  <!-- runlog -->
-  <ng-template #runLogModal let-modal>
-    <form [formGroup]="showConfigForm">
-      <div class="modal-header" style="background-color: #234e54">
-        <h6 class="text-white ">Run Log</h6>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
-          style="color: #fbf3f3">&times;</button>
-      </div>
-      <div *ngFor="let file of availableFileNames">
-        <!-- File Name : {{file.fileName}} -->
-        <div class="modal-body">
-          <hr>
-          <div class="row">
-            <p style="box-shadow:         inset 0 0 10px #000000;" class="p-3 m-3">
-              {{file.fileContent}}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Ok</button>
-      </div>
-    </form>
-  </ng-template>
-
-  <ng-template #pushConfigModal let-modal>
-    <div class="mainContainer">
-      <div class="content">
-        <div class="header">
-          <h1>Angular File Upload</h1>
-        </div>
-        <div class="row margin25">
-
-          <div class="col-md-4">
-
-          </div>
-          <div class="col-md-4">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text upload" (click)="upload()" id="btnUpload">Upload</span>
-              </div>
-              <div class="custom-file">
-                <form action="/api/upload" method="post" enctype="multipart/form-data">
-                  <input (change)="fileChange($event)" type="file" class="custom-file-input" id="inputGroupFile01"
-                    aria-describedby="inputGroupFileAddon01">
-
-                </form>
-                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-
-          </div>
-        </div>
-      </div>
+     </div>
+     <div class="col-4 text-center" style="top: 25px">
+      <button
+       class="btn btn-primary btn-sm mr-2"
+       type="button"
+       (click)="getFiles()"
+       id="btnsave"
+      >
+       View Config Backup
+      </button>
+     </div>
     </div>
-  </ng-template>
-  <!-- change schedule  -->
-  <ng-template #changeScheduleModal let-modal>
-    <form [formGroup]="changeScheduleForm">
-      <div class="modal-header" style="background-color: #234e54">
+    <h6>Available Files !!</h6>
+    <div class="row">
+     <div *ngFor="let file of availableFileNames">
+      <ul style="list-style-type: none">
+       <li (click)="showFileDetails(file.fileContent)">
+        <input
+         type="radio"
+         name="{{ file.fileName }}"
+         id="{{ file.fileName }}"
+        />
+        {{ file.fileName }}
+       </li>
+      </ul>
+     </div>
+    </div>
+    <hr />
+    <div class="row" *ngIf="fileContentDiv">
+     <p style="box-shadow: inset 0 0 10px #000000" class="p-3 m-3">
+      {{ fileContent }}
+     </p>
+    </div>
+   </div>
+   <div class="modal-footer">
+    <button
+     type="button"
+     class="btn btn-outline-dark"
+     (click)="modal.close('Save click')"
+    >
+     Ok
+    </button>
+   </div>
+  </form>
+ </ng-template>
+ <!-- ng modal end -->
 
-        <h6 class="text-white ">Change Schedule</h6>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')"
-          style="color: #fbf3f3">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-4">
-            <div class="form-group">
-              <label for="Date">Change Schedule</label>
-              <input type="datetime-local" class="form-control form-control-sm" formControlName="changeSchedule"
-                id="changeSchedule" />
-            </div>
-          </div>
-          <div class="col-4">
-            <div class="form-group">
-              <label for="changeFrequency">Change Frequency</label>
-              <select class="form-control form-control-sm" formControlName="changeFrequency" id="changeFrequency">
-                <option [value]="-1" selected>Please Select</option>
-                <option *ngFor="let opt of element_options" value="{{ opt.id }}">
-                  {{ opt.value }}
-                </option>
-              </select>
-            </div>
-          </div>
+ <!-- adhocReq modal -->
+ <ng-template #adhocReqModal let-modal>
+  <form [formGroup]="showConfigForm">
+   <div class="modal-header" style="background-color: #234e54">
+    <h6 class="text-white">Adhoc Request</h6>
+    <button
+     type="button"
+     class="close"
+     aria-label="Close"
+     (click)="modal.dismiss('Cross click')"
+     style="color: #fbf3f3"
+    >
+     &times;
+    </button>
+   </div>
+   <div *ngFor="let file of availableFileNames">
+    <!-- File Name : {{file.fileName}} -->
+    <div class="modal-body">
+     <hr />
+     <div class="row">
+      <p style="box-shadow: inset 0 0 10px #000000" class="p-3 m-3">
+       {{ file.fileContent }}
+      </p>
+     </div>
+    </div>
+   </div>
+   <div class="modal-footer">
+    <button
+     type="button"
+     class="btn btn-outline-dark"
+     (click)="modal.close('Save click')"
+    >
+     Ok
+    </button>
+   </div>
+  </form>
+ </ng-template>
 
-        </div>
+ <!-- runlog -->
+ <ng-template #runLogModal let-modal>
+  <form [formGroup]="showConfigForm">
+   <div class="modal-header" style="background-color: #234e54">
+    <h6 class="text-white">Run Log</h6>
+    <button
+     type="button"
+     class="close"
+     aria-label="Close"
+     (click)="modal.dismiss('Cross click')"
+     style="color: #fbf3f3"
+    >
+     &times;
+    </button>
+   </div>
+   <div *ngFor="let file of availableFileNames">
+    <!-- File Name : {{file.fileName}} -->
+    <div class="modal-body">
+     <hr />
+     <div class="row">
+      <p style="box-shadow: inset 0 0 10px #000000" class="p-3 m-3">
+       {{ file.fileContent }}
+      </p>
+     </div>
+    </div>
+   </div>
+   <div class="modal-footer">
+    <button
+     type="button"
+     class="btn btn-outline-dark"
+     (click)="modal.close('Save click')"
+    >
+     Ok
+    </button>
+   </div>
+  </form>
+ </ng-template>
 
+ <ng-template #pushConfigModal let-modal>
+  <div class="mainContainer">
+   <div class="content">
+    <div class="header">
+     <h1>Angular File Upload</h1>
+    </div>
+    <div class="row margin25">
+     <div class="col-md-4"></div>
+     <div class="col-md-4">
+      <div class="input-group">
+       <div class="input-group-prepend">
+        <span class="input-group-text upload" (click)="upload()" id="btnUpload"
+         >Upload</span
+        >
+       </div>
+       <div class="custom-file">
+        <form action="/api/upload" method="post" enctype="multipart/form-data">
+         <input
+          (change)="fileChange($event)"
+          type="file"
+          class="custom-file-input"
+          id="inputGroupFile01"
+          aria-describedby="inputGroupFileAddon01"
+         />
+        </form>
+        <label class="custom-file-label" for="inputGroupFile01"
+         >Choose file</label
+        >
+       </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm btn-block"
-          (click)="modal.close('Save click')">Save</button>
+     </div>
+     <div class="col-md-4"></div>
+    </div>
+   </div>
+  </div>
+ </ng-template>
+ <!-- change schedule  -->
+ <ng-template #changeScheduleModal let-modal>
+  <form [formGroup]="changeScheduleForm">
+   <div class="modal-header" style="background-color: #234e54">
+    <h6 class="text-white">Change Schedule</h6>
+    <button
+     type="button"
+     class="close"
+     aria-label="Close"
+     (click)="modal.dismiss('Cross click')"
+     style="color: #fbf3f3"
+    >
+     &times;
+    </button>
+   </div>
+   <div class="modal-body">
+    <div class="row">
+     <div class="col-4">
+      <div class="form-group">
+       <label for="Date">Change Schedule</label>
+       <input
+        type="datetime-local"
+        class="form-control form-control-sm"
+        formControlName="changeSchedule"
+        id="changeSchedule"
+       />
       </div>
-    </form>
-  </ng-template>
-  <!-- ng modal end -->
+     </div>
+     <div class="col-4">
+      <div class="form-group">
+       <label for="changeFrequency">Change Frequency</label>
+       <select
+        class="form-control form-control-sm"
+        formControlName="changeFrequency"
+        id="changeFrequency"
+       >
+        <option [value]="-1" selected>Please Select</option>
+        <option *ngFor="let opt of element_options" value="{{ opt.id }}">
+         {{ opt.value }}
+        </option>
+       </select>
+      </div>
+     </div>
+    </div>
+   </div>
+   <div class="modal-footer">
+    <button
+     type="button"
+     class="btn btn-secondary btn-sm btn-block"
+     (click)="modal.close('Save click')"
+    >
+     Save
+    </button>
+   </div>
+  </form>
+ </ng-template>
+ <!-- ng modal end -->
+
+ <!-- schedule modal  -->
+ <div
+  class="modal fade bd-example-modal-sm"
+  id="scheduleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+ >
+  <div class="modal-dialog" style="height: 50%" role="document">
+   <div class="modal-content col-6">
+    <div class="modal-header">
+     <h5 class="modal-title">Change Schedule</h5>
+    </div>
+    <div class="modal-body">
+     <form>
+      <div class="form-group col-12" type="date">
+       <div style="float: left; clear: right" class="col-4">
+        <label for="change-schedule" class="col-form-label"
+         >Change Schedule:</label
+        >
+       </div>
+       <div style="float: left" class="col-8">
+        <input
+         type="datetime-local"
+         class="form-control form-control-sm"
+         id="txtChangeSchedule"
+        />
+       </div>
+       <br />
+      </div>
+      <div class="form-group col-12">
+       <div style="float: left; clear: right" class="col-4">
+        <label for="change-frequency" class="col-form-label"
+         >Change Frequency:</label
+        >
+       </div>
+       <div style="float: left" class="col-8">
+        <!-- <input type="text" class="form-control" id="txtChangeFrequency" /> -->
+        <select class="form-control form-control-sm" id="Changefrq">
+         <option [value]="-1" selected>Select schedule for frequency</option>
+         <option *ngFor="let frq of deviceFrequency" value="{{ frq.id }}">
+          {{ frq.value }}
+         </option>
+        </select>
+       </div>
+       <br />
+      </div>
+     </form>
+    </div>
+    <div class="modal-footer">
+     <button type="button" class="btn btn-secondary" data-dismiss="modal">
+      Cancel
+     </button>
+     <button
+      type="button"
+      class="btn btn-primary"
+      (click)="ChangeScheduleSave()"
+     >
+      Save
+     </button>
+    </div>
+   </div>
+  </div>
+ </div>
 </div>
