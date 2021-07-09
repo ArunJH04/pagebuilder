@@ -7,8 +7,7 @@ import { Subscription } from "rxjs";
 import { NotifierService } from "angular-notifier";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { FormControl, FormGroup } from "@angular/forms";
-import { HttpClient } from '@angular/common/http';
-
+import { NgxSpinnerService } from "ngx-spinner";
 export interface DiffCompareConfig {
  leftContent: string;
  rightContent: string;
@@ -75,7 +74,7 @@ export class DeviceAdminComponent implements OnInit {
   private appService: ServiceService,
   private modalService: NgbModal,
   notifier: NotifierService,
-  private http: HttpClient
+  private spinner: NgxSpinnerService
  ) {
   this.notifier = notifier;
   this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
@@ -104,7 +103,11 @@ export class DeviceAdminComponent implements OnInit {
  }
 
  viewConfig(data) {
+  // console.log("dataadmin");
+  // console.log(this.pageId);
   localStorage.setItem("selectedDev", JSON.stringify(data));
+  localStorage.setItem("pageName", this.pageName);
+  localStorage.setItem("pageID", this.pageId);
   this.showViewConfigComponent = true;
   this.showAddComponent = false;
   this.showCompareConfigComponent = false;
@@ -116,8 +119,13 @@ export class DeviceAdminComponent implements OnInit {
   this.showViewConfigComponent = false;
   this.showAddComponent = false;
  }
-
- showAddComp() {
+ sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+ }
+ async showAddComp() {
+  this.spinner.show();
+  console.log("showAddComp");
+  console.log(localStorage.getItem("pageID"));
   let pageType = localStorage.getItem("pageType");
   let elementID = localStorage.getItem("elementID");
   let pageName = localStorage.getItem("pageName");
@@ -126,18 +134,10 @@ export class DeviceAdminComponent implements OnInit {
   this.showViewConfigComponent = false;
   this.showAddComponent = true;
   this.showCompareConfigComponent = false;
-  this.pageName = "Device Admin";
-  let elementDetails = {
-   pageType: pageType,
-   elementID: elementID,
-   pageName: pageName,
-   pageID: pageID,
-   funcType: "edit",
-  };
+  await this.sleep(500);
+  this.BindRecords(elementID);
 
-  this.sendElementMessage(elementDetails);
-
-  this.elementID = elementDetails.elementID;
+  this.spinner.hide();
  }
 
  fileChange(element) {
@@ -279,10 +279,11 @@ export class DeviceAdminComponent implements OnInit {
  }
 
  ngOnInit() {
-  //   this.route.params.subscribe((params: Params) => {
-  //    this.pageId = params.id;
-  //    this.pageName = params.pageName;
-  //   });
+  console.log("devadmin ngoninit");
+  this.route.params.subscribe((params: Params) => {
+   this.pageId = params.id;
+   this.pageName = params.pageName;
+  });
   this.changeScheduleForm = new FormGroup({
    changeSchedule: new FormControl(),
    changeFrequency: new FormControl(),
@@ -460,6 +461,11 @@ export class DeviceAdminComponent implements OnInit {
  }
 
  getRecord(elements) {
+  this.BindRecords(elements.deviceId);
+ }
+ BindRecords(devid) {
+  console.log("bindRecord");
+  console.log(devid);
   this.showViewConfigComponent = false;
   this.showAddComponent = true;
   this.showCompareConfigComponent = false;
@@ -467,7 +473,7 @@ export class DeviceAdminComponent implements OnInit {
   this.pageName = "Device Admin";
   let elementDetails = {
    pageType: this.pageName,
-   elementID: elements.deviceId,
+   elementID: devid,
    pageName: this.pageName,
    pageID: this.pageId,
    funcType: "show",
@@ -517,6 +523,7 @@ export class DeviceAdminComponent implements OnInit {
   });
  }
  sendElementMessage(pageDetails): void {
+  console.log("sendElementMessage");
   console.log(pageDetails);
 
   this.appService.sendUpdate(pageDetails);
