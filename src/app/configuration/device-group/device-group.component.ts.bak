@@ -77,12 +77,10 @@ export class DeviceGroupComponent implements OnInit {
   this.getDeviceGroupList();
   this.DeviceStatus = localStorage.getItem("Status");
   this.Groupidval = localStorage.getItem("Groupid");
+  console.log(this.DeviceStatus);
+  console.log(this.Groupidval);
   if (this.DeviceStatus == "editDeviceGrp") {
    this.BindRecord(this.Groupidval);
-   this.DeviceStatus = "";
-   this.Groupidval = "";
-   localStorage.setItem("Status", "");
-   localStorage.setItem("Groupid", "");
   }
  }
  Reset() {
