@@ -64,14 +64,56 @@ export class ConfigurationService {
   );
  }
 
- getCompareFileInfo(): Observable<any> {
-  return this.http.get(
+ getCompareFileInfo(obj): Observable<any> {
+  return this.http.post(
    environment.configBaseUrl +
     environment.configApiEndPoint.getCompareFilesInfo,
+   obj,
    { headers: headers }
   );
  }
 
+ showConfigFilesInfo(obj): Observable<any> {
+  return this.http.post(
+   environment.configBaseUrl +
+    environment.configApiEndPoint.showConfigFilesInfo,
+   obj,
+   { headers: headers }
+  );
+ }
+
+ uploadPushConfig(obj): Observable<any> {
+  return this.http.post(
+   environment.configBaseUrl + environment.configApiEndPoint.pushConfig,
+   obj,
+   { headers: { "Content-Type": "multipart/form-data; boundary=something" } }
+  );
+ }
+
+ getCompareFiles(obj): Observable<any> {
+  return this.http.post(
+   environment.configBaseUrl + environment.configApiEndPoint.getCompareFiles,
+   obj,
+   { headers: headers }
+  );
+ }
+
+ getFileDetails(fileName): Observable<any> {
+  return this.http.post(
+   environment.configBaseUrl + environment.configApiEndPoint.getFileDetails,
+   fileName,
+   { headers: headers }
+  );
+ }
+
+ showRunLogFilesInfo(obj): Observable<any> {
+  return this.http.post(
+   environment.configBaseUrl +
+    environment.configApiEndPoint.showRunLogFilesInfo,
+   obj,
+   { headers: headers }
+  );
+ }
  createPageItems(id, uid): Observable<any> {
   userHeaders = headers
    .set("Content-Type", "application/json; charset=utf-8")
@@ -84,7 +126,6 @@ export class ConfigurationService {
  }
 
  createPageValues(actionLink, data): Observable<any> {
-  console.log(actionLink);
   return this.http.post(actionLink, data, { headers: headers });
  }
  EditDeviceAdminByID(pageName, id): Observable<any> {
@@ -172,16 +213,6 @@ export class ConfigurationService {
     { headers: headers }
    );
   }
-  //   if (elementName == "User") {
-  //    //uri = environment.configBaseUrl + environment.configApiEndPoint.DeleteUsers;
-  //    return this.http.delete(
-  //     environment.configBaseUrl +
-  //      environment.configApiEndPoint.DeleteUsers +
-  //      "/" +
-  //      id,
-  //     { headers: headers }
-  //    );
-  //   }
  }
 
  EnableData(id, value): Observable<any> {

@@ -43,6 +43,11 @@ export const environment = {
   getDeviceByGroup: "/getDeviceByGroup",
   updateDeviceAdmin: "/Updatedevice",
   getUserByGroup: "/getUserByGroup",
+  showConfigFilesInfo: "/showConfigFilesInfo",
+  showRunLogFilesInfo: "/showRunLogFilesInfo",
+  getFileDetails: "/getFileDetails",
+  getCompareFiles: "/getCompareFiles",
+  pushConfig: "/pushConfig",
 
   DeleteGroup: "/DeleteDeviceGroup",
   DeleteDevice: "/DeleteDevice",
