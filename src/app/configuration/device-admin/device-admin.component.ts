@@ -7,6 +7,7 @@ import { Subscription } from "rxjs";
 import { NotifierService } from "angular-notifier";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { FormControl, FormGroup } from "@angular/forms";
+import { HttpClient } from '@angular/common/http';
 
 export interface DiffCompareConfig {
  leftContent: string;
@@ -21,7 +22,10 @@ export class DeviceAdminComponent implements OnInit {
  showConfigForm: FormGroup;
  pushConfigForm: FormGroup;
  changeScheduleForm: FormGroup;
-
+ myForm = new FormGroup({  
+    file: new FormControl(''),
+    fileSource: new FormControl('')
+  });
  rightDivShow: boolean = false;
  leftDivShow: boolean = true;
  deviceCommand;
@@ -70,7 +74,8 @@ export class DeviceAdminComponent implements OnInit {
   private route: ActivatedRoute,
   private appService: ServiceService,
   private modalService: NgbModal,
-  notifier: NotifierService
+  notifier: NotifierService,
+  private http: HttpClient
  ) {
   this.notifier = notifier;
   this.subscriptionName = this.appService.getUpdate().subscribe((message) => {
@@ -137,28 +142,28 @@ export class DeviceAdminComponent implements OnInit {
 
  fileChange(element) {
   this.uploadedFiles = element.target.files;
- }
 
- upload() {
-  let formData = new FormData();
-  for (var i = 0; i < this.uploadedFiles.length; i++) {
-   formData.append(
-    "uploads[]",
-    this.uploadedFiles[i],
-    this.uploadedFiles[i].name
-   );
+  if (element.target.files.length > 0) {
+    const file = element.target.files[0];
+    this.myForm.patchValue({
+      fileSource: file
+    });
   }
+ }
+ 
+ upload() {
+    const formData = new FormData();
+    console.log(this.myForm.get('fileSource').value);
+    formData.append('pushConfig', this.myForm.get('fileSource').value);
 
   this.configurationService
    .uploadPushConfig(formData)
    .subscribe((data: any) => {
     console.log(data);
-   });
+    alert('Config Uploaded Successfully.');
+    });
 
-  // this.http.post('/api/upload', formData)
-  // .subscribe((response) => {
-  //      console.log('response received is ', response);
-  // })
+
  }
 
  getRunLogFiles() {

@@ -82,11 +82,10 @@ export class ConfigurationService {
   );
  }
 
- uploadPushConfig(obj): Observable<any> {
+ uploadPushConfig(fileObj): Observable<any> {
   return this.http.post(
    environment.configBaseUrl + environment.configApiEndPoint.pushConfig,
-   obj,
-   { headers: { "Content-Type": "multipart/form-data; boundary=something" } }
+   fileObj
   );
  }
 

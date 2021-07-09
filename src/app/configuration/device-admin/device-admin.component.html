@@ -491,7 +491,7 @@
         >
        </div>
        <div class="custom-file">
-        <form action="/api/upload" method="post" enctype="multipart/form-data">
+        <form [formGroup]="myForm">
          <input
           (change)="fileChange($event)"
           type="file"
@@ -499,10 +499,10 @@
           id="inputGroupFile01"
           aria-describedby="inputGroupFileAddon01"
          />
+         
         </form>
         <label class="custom-file-label" for="inputGroupFile01"
-         >Choose file</label
-        >
+         >Choose file</label>
        </div>
       </div>
      </div>
