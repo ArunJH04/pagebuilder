@@ -365,7 +365,7 @@
               <div class="col-4">
                 <input (change)="fileChange($event)" type="file" class="custom-file-input" id="inputGroupFile01"
                   aria-describedby="inputGroupFileAddon01" />
-                <label class="custom-file-label" for="inputGroupFile01">Browse</label>
+                <label class="custom-file-label" for="inputGroupFile01">{{this.uploadedFiles[0]?.name}}</label>
               </div>
             </form>
           </div>
