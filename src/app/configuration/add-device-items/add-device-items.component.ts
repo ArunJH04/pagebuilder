@@ -83,10 +83,17 @@ export class AddDeviceItemsComponent implements OnInit {
     .subscribe((data: any) => {
      this.formElements = data.tabs_list[0].elements_list;
      this.formElements.forEach((input_template) => {
-      this.myFormGroup.addControl(
-       input_template.api_param_name,
-       new FormControl("", Validators.required)
-      );
+      if (input_template.isRequired == 0) {
+       this.myFormGroup.addControl(
+        input_template.api_param_name,
+        new FormControl("")
+       );
+      } else {
+       this.myFormGroup.addControl(
+        input_template.api_param_name,
+        new FormControl("", Validators.required)
+       );
+      }
      });
     });
   });
@@ -131,6 +138,7 @@ export class AddDeviceItemsComponent implements OnInit {
   this.uid = 1;
   this.submitted = true;
   if (this.myFormGroup.valid) {
+   this.spinner.show();
    this.formElements.forEach((element) => {
     if (
      element.element_name === "Finish" &&
@@ -198,6 +206,7 @@ export class AddDeviceItemsComponent implements OnInit {
       }
      });
    }
+   this.spinner.hide();
   } else {
    this.notifier.notify("error", "Please fill all the mandetory fields!");
    //this.validateAllFormFields(this.myFormGroup); //{7}
@@ -284,7 +293,6 @@ export class AddDeviceItemsComponent implements OnInit {
    .createPageItems(this.pageId, this.uid)
    .subscribe((data: any) => {
     this.formElements = data.tabs_list[0].elements_list;
-    console.log(this.formElements);
     this.formElements.forEach((input_template) => {
      if (input_template.isRequired == 0) {
       this.myFormGroup.addControl(

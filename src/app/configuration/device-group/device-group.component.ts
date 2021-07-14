@@ -5,6 +5,7 @@ import { NotifierService } from "angular-notifier";
 import { getLocaleDateFormat } from "@angular/common";
 import { ServiceService } from "../../service.service";
 import { Subscription } from "rxjs";
+
 @Component({
  selector: "app-device-group",
  templateUrl: "./device-group.component.html",

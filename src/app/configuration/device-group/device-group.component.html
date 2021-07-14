@@ -87,7 +87,8 @@
       />
      </th>
      <td colspan="2" class="f16" (click)="getRecord(ValbyGrp)">
-      <img src="../../../assets/grpadmin.png" /> &nbsp; {{ ValbyGrp.groupName }}
+      <img src="../../../assets/grpadmin.png" style="cursor: pointer" /> &nbsp;
+      {{ ValbyGrp.groupName }}
      </td>
      <td (click)="getRecord(ValbyGrp)" style="text-align: right">
       <span *ngIf="ValbyGrp.is_enabled === 1" class="text-success">
@@ -313,10 +314,10 @@
  id="CreateModal"
  tabindex="-1"
  role="dialog"
- aria-labelledby="exampleModalLabel"
+ aria-labelledby="exampleGrpModalLabel"
  aria-hidden="true"
 >
- <div class="modal-dialog" role="document">
+ <div class="modal-dialog modal-dialog-centered" role="document">
   <div class="modal-content">
    <div class="modal-header">
     <h5 class="modal-title">CREATE DEVICE GROUP</h5>
@@ -331,7 +332,7 @@
    <div class="modal-body col-12">
     <form>
      <div class="form-group">
-      <label for="change-schedule" class="col-form-label">New Group </label>
+      <label for="new-group" class="col-form-label">New Group </label>
       <input class="form-control form-control-sm" id="txtgrpName" />
      </div>
     </form>

@@ -1,105 +1,132 @@
 tbody {
-  display: block;
-  height: 72vh;
-  overflow: auto;
+ display: block;
+ height: 72vh;
+ overflow: auto;
 }
 thead,
 tbody tr {
-  color: var(--font-color);
-  display: table;
-  width: 100%;
+ color: var(--font-color);
+ display: table;
+ width: 100%;
 }
 
 .pt-25 {
-  padding-top: 0.25rem !important;
+ padding-top: 0.25rem !important;
 }
 .bc-n {
-  background-color: transparent;
-  border: none;
+ background-color: transparent;
+ border: none;
 }
 
 .p-255 {
-  padding: 0.25rem 0.5rem;
+ padding: 0.25rem 0.5rem;
 }
 
 .config_backup_leftVar {
-  width: 580px;
-  height: 80%;
-  float: left;
-  border: 3px solid rgb(124, 117, 117);
-  padding: 20px;
-  display: none;
+ width: 580px;
+ height: 80%;
+ float: left;
+ border: 3px solid rgb(124, 117, 117);
+ padding: 20px;
+ display: none;
 }
 
 .config_backup_rightVar {
-  margin-left: 600px;
-  height: 80%;
-  border: 3px solid rgb(124, 117, 117);
-  padding: 20px;
-  display: none;
+ margin-left: 600px;
+ height: 80%;
+ border: 3px solid rgb(124, 117, 117);
+ padding: 20px;
+ display: none;
 }
 
 .compareBtn {
-  background-color: #234e54;
-  color: #fbf3f3;
-  text-align: center;
+ background-color: #234e54;
+ color: #fbf3f3;
+ text-align: center;
 }
 
 .modal {
-  padding: 5 !important;
-  margin-top: 30px;
+ padding: 5 !important;
+ margin-top: 30px;
 }
 
 .modal-dialog {
-  max-width: 80% !important;
-  height: 90%;
-  padding: 0;
-  margin: auto;
+ max-width: 80% !important;
+ height: 90%;
+ padding: 0;
+ margin: auto;
 }
 
 .modal-content {
-  border-radius: 2 !important;
-  height: 100%;
+ border-radius: 2 !important;
+ height: 100%;
 }
 
 #scrollbox {
-  overflow-y: auto;
-  max-height: calc(100vh - 150px);
+ overflow-y: auto;
+ max-height: calc(100vh - 150px);
 }
 
 ::ng-deep .modal-dialog {
-  max-width: 80% !important;
-  height: 90%;
-  padding: 0;
-  margin: auto;
+ max-width: 80% !important;
+ height: 90%;
+ padding: 0;
+ margin: auto;
 }
 
 .dropdown-item {
-  cursor: pointer;
+ cursor: pointer;
 }
 
 .header {
-  text-align: center;
+ text-align: center;
 }
 
 .header h1 {
-  font-family: serif;
-  font-size: 38px;
-  font-family: 'Times New Roman';
+ font-family: serif;
+ font-size: 38px;
+ font-family: "Times New Roman";
 }
 
 .content {
-  margin: 100px;
+ margin: 100px;
 }
 
 .margin25 {
-  margin: 25px;
+ margin: 25px;
 }
 
 .upload {
-  cursor: pointer;
+ cursor: pointer;
 }
 
 .deviceDetails strong {
-  font-size: 12px;
+ font-size: 12px;
+}
+
+.p3 {
+ padding: 0.5rem 3rem !important;
+}
+.font12 {
+ font-size: 12px;
+}
+.font14 {
+ font-size: 14px;
+}
+.grpimg {
+ height: 15px;
+ width: 14px;
+}
+
+#FilterModal .modal-dialog {
+ width: 250px;
+}
+
+#FilterModal .modal-content {
+ height: 330px !important;
+}
+
+#backup ul li {
+ padding-top: 5px !important;
+ padding-bottom: 5px !important;
 }
