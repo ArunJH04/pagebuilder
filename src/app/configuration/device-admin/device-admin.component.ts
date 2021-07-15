@@ -104,6 +104,7 @@ export class DeviceAdminComponent implements OnInit {
   }
 
   getAdhocReqFiles(deviceAdminDtls) {
+    this.availableFileNames = [];
     let obj = {
       deviceId: deviceAdminDtls[0].deviceId,
     };
