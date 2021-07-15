@@ -108,12 +108,14 @@ export class DeviceAdminComponent implements OnInit {
       deviceId: deviceAdminDtls[0].deviceId,
     };
     console.log(obj);
+    this.spinner.show();
 
     this.configurationService
       .pullAdhocConfigDetails(obj)
       .subscribe((data: any) => {
         this.availableFileNames = data;
         console.log(this.availableFileNames);
+        this.spinner.hide();
       });
   }
 
